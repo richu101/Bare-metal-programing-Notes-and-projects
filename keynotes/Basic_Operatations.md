@@ -61,6 +61,14 @@ one input:
 
 ## <span style="color:pink"> Using OR to set bits </span> 
 
+### where to use this techinque ?
+if we want to turn on some bits in PORTB while leaving the others
+untouched, we’ll create a bitmask with ones in the bit locations we’d like turned
+on.
+
+Here we set—PORTB has all its old bits intact, except
+those where there was a 1 in the bitmask have been turned on
+
 ```
 PORTB : 0b11000011 // the current PORTB state
 
@@ -69,6 +77,7 @@ PORTB : 0b11000011 // the current PORTB state
 | = 0b11000111
 
 ```
+
 >PORTB = PORTB | (1 << 2);
 
  ### `OR`
