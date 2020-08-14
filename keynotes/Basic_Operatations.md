@@ -57,9 +57,9 @@ one input:
 
 >= 0011
 
-# <span style="color:lightblue"> Bit shift Techniques </span> 
+# <span style="color:lightblue"> Bitwise Operations </span> 
 
-## <span style="color:pink"> Using OR to set bits </span> 
+* ## <span style="color:pink"> Setting Bits with OR </span> 
 
 ### where to use this techinque ?
 if we want to turn on some bits in PORTB while leaving the others
@@ -83,4 +83,5 @@ PORTB : 0b11000011 // the current PORTB state
  ### `OR`
  >PORTB | = (1<<2);
 
- 
+* ## <span style="color:pink"> Toggling Bits with XOR </span>
+  
