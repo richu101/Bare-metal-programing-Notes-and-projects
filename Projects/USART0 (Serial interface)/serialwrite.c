@@ -28,14 +28,14 @@ uint8_t Read_val = 0;
 int main(void)
 {
  serialbegin();
- uint8_t i;
+
  sei();
  
- writeserial("Hello/n/r");
- writeserial("WorLdD/n/r");
+ writeserial("Hello");
+ writeserial("WorLdD");
     while (1) 
     {
-		
+		UDRE0 = 3;
     }
 	return 0;
 }
@@ -54,7 +54,7 @@ int main(void)
  */
 void writeserial(char c[])
 {
-	if (i=0;i<10;i++)
+	for (uint8_t i=0;i<10;i++)
 	{
 		appendserial(c[i]);
 	}
