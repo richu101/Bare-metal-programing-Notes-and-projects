@@ -95,8 +95,10 @@ void appendserial(char c)
 
 char rxgetchar (void)
 {  
-	while(!(UCSR0A)
-}
+	while(!(UCSR0A & (1<<RXC0)))
+	
+	return UDR0;
+} 
 
 
 ISR(USART_TX_vect)  
