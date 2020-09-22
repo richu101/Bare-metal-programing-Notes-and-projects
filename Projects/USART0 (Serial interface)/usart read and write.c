@@ -30,7 +30,7 @@ uint8_t txreadpos=0;
 uint8_t rxreadpos=0;
 uint8_t txwritepos=0;
 uint8_t rxgetpos = 0;
-char data = 0;
+char data;
 
 void appendserial(char c);
 void writeserial(char c[]);
@@ -48,7 +48,7 @@ int main(void)
   while(1)
   {
 	
-	 writeserial(rxdata);
+	 writeserial(rxgetchar());
 	 _delay_ms(500);
 
 
@@ -74,7 +74,7 @@ void writeserial(char c[])
   {
     appendserial(*c);
     c++;
-  }
+  } 
    appendserial(' ');
   if(UCSR0A & (1<<UDRE0))
   {
@@ -93,21 +93,9 @@ void appendserial(char c)
 }
 
 
-char *rxgetchar (void)
+char rxgetchar (void)
 {  
-	char *rxptr ;
-	rxptr = &rxdata;
-	while(*rxptr != '/0' )
-	{
-		rxgetpos++;
-		if (rxgetpos > buffersize)
-		{
-			rxgetpos=0;
-		}
-	}
-	rxgetpos++;
-	rxptr = rxptr+rxgetpos;
-	return *rxptr;	
+	while(!(UCSR0A)
 }
 
 
@@ -124,18 +112,21 @@ ISR(USART_TX_vect)
 	  txreadpos = 0;
   }
   
+  
 }
 
+/*
 
 ISR(USART_RX_vect)
 {   
 	 
 	 rxdata[rxreadpos] = UDR0;
-	
-	rxdata[rxreadpos+1] = '/0';
-	 rxreadpos++;	 
+	 rxreadpos++;
+	// rxdata[rxreadpos] = '/0';	 
 	 if (rxreadpos >= (buffersize-1))
 	 {
 		 rxreadpos = 0;
 	 }  	
 }
+
+*/
