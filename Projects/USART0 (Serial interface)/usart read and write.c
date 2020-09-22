@@ -25,11 +25,12 @@
 char serialbuffer[buffersize];
 char rxdata[buffersize] ;
 
+int rxintdata;
 uint8_t txreadpos=0;
 uint8_t rxreadpos=0;
 uint8_t txwritepos=0;
-uint8_t rxgetpos = 55;
-char data;
+uint8_t rxgetpos = 0;
+char data = 0;
 
 void appendserial(char c);
 void writeserial(char c[]);
@@ -94,11 +95,18 @@ void appendserial(char c)
 
 char *rxgetchar (void)
 {  
-	rxreadpos = 0;
-		
-		
 	char *rxptr ;
-	*rxptr = &rxdata;
+	rxptr = &rxdata;
+	while(*rxptr != '/0' )
+	{
+		rxgetpos++;
+		if (rxgetpos > buffersize)
+		{
+			rxgetpos=0;
+		}
+	}
+	rxgetpos++;
+	rxptr = rxptr+rxgetpos;
 	return *rxptr;	
 }
 
@@ -116,7 +124,6 @@ ISR(USART_TX_vect)
 	  txreadpos = 0;
   }
   
-  
 }
 
 
@@ -124,8 +131,10 @@ ISR(USART_RX_vect)
 {   
 	 
 	 rxdata[rxreadpos] = UDR0;
+	
+	rxdata[rxreadpos+1] = '/0';
 	 rxreadpos++;	 
-	 if (rxreadpos >= buffersize)
+	 if (rxreadpos >= (buffersize-1))
 	 {
 		 rxreadpos = 0;
 	 }  	
