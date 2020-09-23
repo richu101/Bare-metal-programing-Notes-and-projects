@@ -96,7 +96,7 @@ void appendserial(char c)
 char *rxgetchar (void)
 {  
 	char *rxptr ;
-	*rxptr = &rxdata;
+	rxptr = &rxdata;
 	while( *rxptr != '/0' )
 	{
 		rxgetpos++;
@@ -107,7 +107,7 @@ char *rxgetchar (void)
 	}
 	rxgetpos++;
 	
-	return *rxptr;	
+	return rxptr;	
 }
 
 
@@ -133,7 +133,7 @@ ISR(USART_RX_vect)
 	 
 	 rxdata[rxreadpos] = UDR0;
 	 rxreadpos++;
-	 rxdata[rxreadpos] = '/0';	 
+	// rxdata[rxreadpos] = '/0';	 
 	 if (rxreadpos >= (buffersize-1))
 	 {
 		 rxreadpos = 0;
