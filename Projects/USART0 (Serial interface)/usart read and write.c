@@ -93,12 +93,22 @@ void appendserial(char c)
 }
 
 
-char rxgetchar (void)
+char *rxgetchar (void)
 {  
-	while(!(UCSR0A & (1<<RXC0)))
+	char *rxptr ;
+	*rxptr = &rxdata;
+	while( *rxptr != '/0' )
+	{
+		rxgetpos++;
+		if (rxgetpos > buffersize)
+		{
+			rxgetpos=0;
+		}
+	}
+	rxgetpos++;
 	
-	return UDR0;
-} 
+	return *rxptr;	
+}
 
 
 ISR(USART_TX_vect)  
@@ -117,18 +127,15 @@ ISR(USART_TX_vect)
   
 }
 
-/*
 
 ISR(USART_RX_vect)
 {   
 	 
 	 rxdata[rxreadpos] = UDR0;
 	 rxreadpos++;
-	// rxdata[rxreadpos] = '/0';	 
+	 rxdata[rxreadpos] = '/0';	 
 	 if (rxreadpos >= (buffersize-1))
 	 {
 		 rxreadpos = 0;
 	 }  	
 }
-
-*/
