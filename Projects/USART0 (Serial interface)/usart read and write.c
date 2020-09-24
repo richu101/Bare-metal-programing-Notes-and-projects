@@ -1,60 +1,15 @@
-/*
- * Serial communication liberary.c
- *
- * This is a library for USART communication  (Serial communication). 
- * To initialize the USART communication call the serial begin function. This will initialize with baud rate 9600 . If you want to change the baud rate just the value of BAUD to whatever BAUD you want
- * DATA Frame structure - 1 ( start bit and stop bit ) 8 Bit data frame and no parity is used  
-   
- 
- 
- 
- * Created: 28-08-2020 07:02:34 PM
- * Author : RICHU BINI
- */ 
 
-#include <avr/io.h>
-#include <avr/interrupt.h>
+
+
+
+#include<avr/io.h>
 #define F_CPU 16000000
 #include <util/delay.h>
 
-
+unsigned char string[20];
 #define BAUD 9600
 #define UBBR_VAL ((F_CPU/16/BAUD)-1)
-#define buffersize 128
 
-char serialbuffer[buffersize];
-char rxdata[buffersize] ;
-
-int rxintdata;
-uint8_t txreadpos=0;
-uint8_t rxreadpos=0;
-uint8_t txwritepos=0;
-uint8_t rxgetpos = 0;
-char data;
-
-void appendserial(char c);
-void writeserial(char c[]);
-void serialbegin();
-char *rxgetchar ();
-
-int main(void)
-{
-  serialbegin();
-   DDRB = (1<<5);
-  sei();
- 
-  
-  // writeserial("World");
-  while(1)
-  {
-	
-	 writeserial(rxgetchar());
-	 _delay_ms(500);
-
-
-  }
-  return 0;
-}
 
 void serialbegin()
 {
@@ -64,78 +19,67 @@ void serialbegin()
 	UBRR0H = UBBR_VAL >> 8;
 }
 
-
-
-
-void writeserial(char c[])
+//Transmit character through UART
+void UART1_Tx_Char(unsigned char data)
 {
-  
-  while(*c != 0)
-  {
-    appendserial(*c);
-    c++;
-  } 
-   appendserial(' ');
-  if(UCSR0A & (1<<UDRE0))
-  {
-    UDR0 = 0;
-  }
-}
+	//put the data to be transmitted into the UDR register
+	UDR0 = data;
 
-void appendserial(char c)
-{
-  serialbuffer[txwritepos] = c;
-  txwritepos++;
-  if(txwritepos >= buffersize)
-  {
-    txwritepos = 0;
-  }
+	//wait until the transmission is completed
+	while(!(UCSR0A&(1<<UDRE0)));
 }
 
 
-char *rxgetchar (void)
-{  
-	char *rxptr ;
-	rxptr = &rxdata;
-	while( *rxptr != '/0' )
+//Transmit string through UART
+void UART1_Tx_Str(unsigned char *str)
+{
+	while(*str)
 	{
-		rxgetpos++;
-		if (rxgetpos > buffersize)
-		{
-			rxgetpos=0;
-		}
+		UDR0 = *str++;
+		while(!(UCSR0A&(1<<UDRE0)));
 	}
-	rxgetpos++;
-	
-	return rxptr;	
 }
 
+	//Receive a character through UART
+	unsigned char UART1_Rx_Char()
+	{
+		//wait for the charater
+		while(!(UCSR0A & (1<<RXC0)));
 
-ISR(USART_TX_vect)  
-{
-	
-   if(txreadpos != txwritepos)
-  {
-    UDR0 = serialbuffer[txreadpos];
-    txreadpos++;
-  }
-  if (txreadpos >= buffersize)
-  {
-	  txreadpos = 0;
-  }
-  
-  
-}
+		//return the received charater
+		return(UDR0);
+	}
 
+	//Receive string through UART
+	unsigned char * UART1_Rx_Str()
+	{
+		unsigned char  x, i = 0;
 
-ISR(USART_RX_vect)
-{   
-	 
-	 rxdata[rxreadpos] = UDR0;
-	 rxreadpos++;
-	// rxdata[rxreadpos] = '/0';	 
-	 if (rxreadpos >= (buffersize-1))
-	 {
-		 rxreadpos = 0;
-	 }  	
-}
+		//receive the characters until ENTER is pressed (ASCII for ENTER = 13)
+		while((x = UART1_Rx_Char()) != 13)
+		{
+			//and store the received characters into the array string[] one-by-one
+			string[i++] = x;
+		}
+
+		//insert NULL to terminate the string
+		string[i] = '\0';
+
+		//return the received string
+		return(string);
+	}
+
+	int main()
+	{
+		//initialize the UART circuitry
+	    serialbegin();
+
+		//Transmit the Received string onto the UART again
+		while(1)
+		{
+			UART1_Tx_Str(UART1_Rx_Str());
+			_delay_ms(500);
+		}
+		return 0;
+		
+	}	
