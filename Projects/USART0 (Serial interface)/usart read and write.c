@@ -28,7 +28,14 @@ void UART1_Tx_Char(unsigned char data)
 	//wait until the transmission is completed
 	while(!(UCSR0A&(1<<UDRE0)));
 }
+void * serial_print_str(unsigned char a[20])
+{
+	unsigned char * ptrval;
+	ptrval = a;
+	UART1_Tx_Str(ptrval);
 
+
+}
 
 //Transmit string through UART
 void UART1_Tx_Str(unsigned char *str)
@@ -56,7 +63,7 @@ void UART1_Tx_Str(unsigned char *str)
 		unsigned char  x, i = 0;
 
 		//receive the characters until ENTER is pressed (ASCII for ENTER = 13)
-		while((x = UART1_Rx_Char()) != 13)
+		while((x = UART1_Rx_Char()) != 0)
 		{
 			//and store the received characters into the array string[] one-by-one
 			string[i++] = x;
