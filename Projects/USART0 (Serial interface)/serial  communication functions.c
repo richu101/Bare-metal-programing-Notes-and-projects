@@ -2,8 +2,7 @@
  * Serial communication liberary.c
  *
  * This is a library for USART communication  (Serial communication). 
- * To initialize the USART communication call the serial begin function. This will initialize with baud rate 9600 .
- * If you want to change the baud rate just the value of BAUD to whatever BAUD you want
+ * To initialize the USART communication call the serial begin function. This will initialize with baud rate 9600 . If you want to change the baud rate just the value of BAUD to whatever BAUD you want
  * DATA Frame structure - 1 ( start bit and stop bit ) 8 Bit data frame and no parity is used  
    
  
@@ -25,6 +24,7 @@
 
 char serialbuffer[buffersize];
 char rxdata[buffersize] ;
+char durxdata[buffersize] ;
 
 int rxintdata;
 uint8_t txreadpos=0;
@@ -32,13 +32,14 @@ uint8_t rxreadpos=0;
 uint8_t txwritepos=0;
 uint8_t rxgetpos = 0;
 char data;
-char str[];
+// char str[];
 
 void appendserial(char c);
 void writeserial(char c[]);
 void serialbegin();
 char *rxgetchar ();
-
+void clrrxd();
+void cpyrxd();
 
 int main(void)
 {
@@ -47,16 +48,15 @@ int main(void)
   sei();
  
   
-  // writeserial("World");
+  
   while(1)
   {
 	
 	writeserial(rxgetchar());
-	//UDR0 ='a';
 	 _delay_ms(500);
-
-
+	 writeserial("NEW CHAR :");	 
   }
+  
   return 0;
 }
 
@@ -99,24 +99,36 @@ void appendserial(char c)
 
 char * rxgetchar (void)
 {  
-	
-	char * str = rxdata;
+	cpyrxd();
+	char * str = durxdata;
+	clrrxd();
 	return str;	
 }
 
-/*
 
-void clrsrt(char c[])
+// clear the values  in the rxdata string
+void clrrxd()
 {
-	char *ptr = c;
-	while(*ptr)
+	char * rxd = rxdata;
+	while (*rxd)
 	{
-		*ptr ='/0';
-		*ptr++;
+		*rxd = 0;
+		rxd++;
 	}
+	rxreadpos=0;
+}
+//copy the rxdata string to durxdtata
+void cpyrxd()
+{
+	uint8_t i;
+	for (i=0;i<=rxreadpos;i++)
+	{
+		durxdata[i] =rxdata[i];
+	}
+	//clrrxd();
 }
 
-*/
+
 ISR(USART_TX_vect)  
 {
 	
