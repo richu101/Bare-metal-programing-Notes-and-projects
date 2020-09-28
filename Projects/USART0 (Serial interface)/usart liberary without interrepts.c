@@ -1,3 +1,18 @@
+/*
+ * Serial communication liberary.c
+ *
+ * This is a library for USART communication  (Serial communication). 
+ * To initialize the USART communication call the serial begin function. This will initialize with baud rate 9600 . If you want to change the baud rate just the value of BAUD to whatever BAUD you want
+ * DATA Frame structure - 1 ( start bit and stop bit ) 8 Bit data frame and no parity is used  
+   
+ 
+ 
+ 
+ * Created: 28-08-2020 07:02:34 PM
+ * Author : RICHU BINI
+ */ 
+
+
 #include<avr/io.h>
 #define F_CPU 16000000
 #include <util/delay.h>
@@ -24,13 +39,20 @@ void serialwritechar(unsigned char data)
 	//wait until the transmission is completed
 	while(!(UCSR0A&(1<<UDRE0)));
 }
-void * serialwritestr(unsigned char a[20])
+//Transmit integer through UART
+void serialwriteint(int data)
+{
+	//put the data to be transmitted into the UDR register
+	UDR0 = data;
+
+	//wait until the transmission is completed
+	while(!(UCSR0A&(1<<UDRE0)));
+}
+void  serialwritestr(unsigned char a[20])
 {
 	unsigned char * ptrval;
 	ptrval = a;
 	serialwriteptr(ptrval);
-
-
 }
 
 //Transmit string through UART
@@ -50,6 +72,15 @@ void serialwriteptr(unsigned char *str)
 		while(!(UCSR0A & (1<<RXC0)));
 
 		//return the received charater
+		return(UDR0);
+	}
+	//Receive a integer through UART
+	int serialreadint()
+	{
+		//wait for the value
+		while(!(UCSR0A & (1<<RXC0)));
+
+		//return the received integer
 		return(UDR0);
 	}
 
@@ -80,7 +111,7 @@ void serialwriteptr(unsigned char *str)
 		//Transmit the Received string onto the UART again
 		while(1)
 		{
-			serialwriteptr("hello");
+			serialwriteint(serialreadint());
 			_delay_ms(500);
 		}
 		return 0;

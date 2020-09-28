@@ -2,11 +2,11 @@
  * Serial communication liberary.c
  *
  * This is a library for USART communication  (Serial communication). 
- * To initialize the USART communication call the serial begin function. This will initialize with baud rate 9600 . If you want to change the baud rate just the value of BAUD to whatever BAUD you want
+ * To initialize the USART communication call the serial begin function. This will initialize with baud rate 9600 . 
+ * If you want to change the baud rate just the value of BAUD to whatever BAUD you want
  * DATA Frame structure - 1 ( start bit and stop bit ) 8 Bit data frame and no parity is used  
+ * 
    
- 
- 
  
  * Created: 28-08-2020 07:02:34 PM
  * Author : RICHU BINI
@@ -31,7 +31,7 @@ uint8_t txreadpos=0;
 uint8_t rxreadpos=0;
 uint8_t txwritepos=0;
 uint8_t rxgetpos = 0;
-char data;
+int data;
 // char str[];
 
 void appendserial(char c);
@@ -52,7 +52,7 @@ int main(void)
   while(1)
   {
 	
-	writeserial(rxgetchar());
+	writeserial(serialread());
 	 _delay_ms(500);
 	 writeserial("NEW CHAR :");	 
   }
@@ -96,6 +96,13 @@ void appendserial(char c)
   }
 }
 
+int serialread()
+{
+   uint8_t i = data;
+   data = 0;
+
+    return i;
+}
 
 char * rxgetchar (void)
 {  
@@ -125,7 +132,7 @@ void cpyrxd()
 	{
 		durxdata[i] =rxdata[i];
 	}
-	//clrrxd();
+
 }
 
 
@@ -151,6 +158,7 @@ ISR(USART_RX_vect)
 {   
 	 
 	 rxdata[rxreadpos] = UDR0;
+     data = UDR0;
 	 rxreadpos++;
 	 rxdata[rxreadpos] = 0;	 
 	 if (rxreadpos >= (buffersize-1))
