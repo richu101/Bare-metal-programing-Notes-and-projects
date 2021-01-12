@@ -40,7 +40,10 @@ ________________________________________________________________________________
  */ 
 
 #include<avr/io.h>
-#define F_CPU 16000000
+// #define F_CPU 16000000
+#ifndef __AVR_ATmega328P__ 
+    #define __AVR_ATmega328P__
+#endif
 
 unsigned char string[20];
 #define BAUD 9600

@@ -41,7 +41,10 @@ ________________________________________________________________________________
 
 
 #include<avr/io.h>
-#define F_CPU 16000000
+ // #define F_CPU 16000000
+#ifndef __AVR_ATmega328P__ 
+    #define __AVR_ATmega328P__
+#endif
 
 unsigned char string[20];
 #define BAUD 9600
@@ -65,6 +68,17 @@ void serialwritechar(unsigned char data)
 	//wait until the transmission is completed
 	while(!(UCSR0A&(1<<UDRE0)));
 }
+
+//Transmit string through UART
+void serialwriteptr(unsigned char *str)
+{
+	while(*str)
+	{
+		UDR0 = *str++;
+		while(!(UCSR0A&(1<<UDRE0)));
+	}
+}
+
 //Transmit integer through UART
 void serialwriteint(int data)
 {
@@ -76,20 +90,12 @@ void serialwriteint(int data)
 }
 void  serialwritestr(unsigned char a[20])
 {
-	unsigned char * ptrval;
+	unsigned char *ptrval;
 	ptrval = a;
 	serialwriteptr(ptrval);
 }
 
-//Transmit string through UART
-void serialwriteptr(unsigned char *str)
-{
-	while(*str)
-	{
-		UDR0 = *str++;
-		while(!(UCSR0A&(1<<UDRE0)));
-	}
-}
+
 
 	//Receive a character through UART
 	unsigned char serialreadchar()
