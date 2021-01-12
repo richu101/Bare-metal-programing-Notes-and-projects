@@ -1,6 +1,0 @@
-{
-    "AVR.source.compiler": "/usr/bin/avr-c++",
-    "AVR.programmer.tool": "/usr/bin/avrdude",
-    "AVR.programmer.definitions": "/etc/avrdude.conf",
-    "AVR.source.libraries": []
-}

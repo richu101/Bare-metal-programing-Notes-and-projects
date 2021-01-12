@@ -1,13 +1,17 @@
 {
     "configurations": [
         {
-            "name": "AVR",
-            "intelliSenseMode": "${default}",
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/lib/avr/include"
+                // here you need to include the path to all the liberaries that u used
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/avr-gcc", // here u need to add the path to avr-gcc
             "cStandard": "c11",
-            "cppStandard": "c++14",
-            "compilerPath": "/usr/bin/avr-c++",
-            "includePath": [],
-            "compilerArgs": []
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-arm"
         }
     ],
     "version": 4
