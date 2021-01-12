@@ -22,9 +22,10 @@ int main(void)
         for(int i = 0;i<=75;i++)
         {
         serialwritechar(str[i]);
-        serialwritechar(10);
-        
+        // serialwritechar(10);
+
         }
+        serialwritechar(10); // ASCII 10 = /n = new line
         _delay_ms(2000);
         
 
