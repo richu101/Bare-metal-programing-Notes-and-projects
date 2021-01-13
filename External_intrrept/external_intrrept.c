@@ -26,11 +26,12 @@ ISR(INT0_vect)
 void external_intrrept_init()
 {
     EIMSK |= (1<<INT0);
-    EICRA |= (1<<ISC01);
+    EICRA |= (1<<ISC01);  //Intrrept vect will trigger 
 }
 
 int main(void)
 {
+    
     DDRB != 0xff;
     while(1)
     {
