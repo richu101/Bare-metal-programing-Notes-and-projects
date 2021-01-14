@@ -1,11 +1,13 @@
 /*
 
+
 #  This part is to define the board that we are using 
 #  You can see all  the board list that are availabele in the ave/io.h lib by 
 #  peacking to the header just select the avr/io.h in the #include part and press F12
 #  press ctrl + f and search for the board that u are looking for
 #  If your board is available then u can see the board name unde __AVR_your-board__
 #  Here am using Atmega328p SO   __AVR_ATmega328P__ 
+
 
 */  
 
