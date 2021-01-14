@@ -46,8 +46,8 @@ int main(void)
     {
     PORTB = 0xff;
     _delay_ms(1000);
-    // PORTB = (0<<5);
-    // _delay_ms(100);
+    PORTB = (0<<5);
+    _delay_ms(100);
 
     }
 return (0);
