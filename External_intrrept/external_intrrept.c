@@ -20,25 +20,32 @@
 
 ISR(INT0_vect)
 {
-
+    if(bit_is_set(PIND,PIND2))
+    {
+        PORTB = 0;
+        _delay_ms(10000);
+    }
 
 }
 void external_intrrept_init()
 {
     EIMSK |= (1<<INT0);
-    EICRA |= (1<<ISC01);  //Intrrept vect will trigger 
+    EICRA |= (1<<ISC01);  //The falling edge of INT0 generates an interrupt request.
 }
 
 int main(void)
 {
     
     DDRB != 0xff;
+    DDRD |= (0<<PD2);  //setting PD2 pin as output mode
+    PORTD |= (1<<PD2); //enabling the internal pull up
+    
     while(1)
     {
     PORTB = 0xff;
     _delay_ms(1000);
-    PORTB = (0<<5);
-    _delay_ms(100);
+    // PORTB = (0<<5);
+    // _delay_ms(100);
 
     }
 return (0);
