@@ -33,7 +33,7 @@ void external_intrrept_init()
 {
     EIMSK |= (1<<INT0);
     EICRA |= (1<<ISC01);  //The falling edge of INT0 generates an interrupt request.
-    sei();
+    sei();  // enable all  the intrrept
 }
 
 int main(void)
