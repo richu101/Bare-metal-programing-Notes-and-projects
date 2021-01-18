@@ -46,7 +46,8 @@ int main(void)
 
     while(1)
     {
-        
+        PORTD |= (1<<2);
+         
 
     }
 return (0);
