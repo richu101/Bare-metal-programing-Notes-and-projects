@@ -20,7 +20,7 @@
 #include<avr/power.h>
 #include"USART_liberry/usart.h"
 
-volatile int cycle_count ;
+
 ISR(PCINT2_vect)
 {
     
@@ -43,11 +43,13 @@ int main(void)
     MCUCR |=(1<<PUD);
     DDRB   = 0xff;
     PORTD |= (1<<PD4);
+    volatile int cycle_count ;
 
     while(1)
     {
-        PORTD |= (1<<2);
-        _delay_us(1);
+    cycle_count = 0;
+    
+
 
     }
 return (0);
