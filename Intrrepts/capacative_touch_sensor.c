@@ -47,7 +47,7 @@ int main(void)
     while(1)
     {
         PORTD |= (1<<2);
-         
+        _delay_us(1);
 
     }
 return (0);
