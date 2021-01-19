@@ -13,7 +13,7 @@
     #define __AVR_ATmega328P__
 #endif
 #define F_CPU 16000000UL
-
+#define threshold 12000
 #include<avr/io.h>
 #include<util/delay.h>
 #include<avr/interrupt.h>
@@ -32,7 +32,7 @@ void pcint_enable()
     PCICR |= (1<<PCIE2); // Pin change intrrepts enables to PORTD pins
     // PCIE2 is PORTD pins
     PCMSK2 |= (1<<PCINT19); // pin change intrrept enable for PD4 pin  
-    // sei(); // enable the globaol intrrepts
+    
 }
 
 int main(void)
@@ -49,11 +49,19 @@ int main(void)
     {
     cycle_count = 0; // reset the charge cycle counter
     DDRD |= (1<<PD4); //when it is in output mode the cap starts charging bcs we set the port as high alredy 
-
-
+    sei();
+    _delay_ms(200);
+    cli(); //disable the global intrrept vect
+    if(cycle_count == threshold)
+    {
+        PORTB = 0xff:
     
-
-
+    }
+    else
+    {
+        PORTB = 0;
+    }
+    
     }
 return (0);
 
