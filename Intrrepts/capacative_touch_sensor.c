@@ -47,7 +47,10 @@ int main(void)
 
     while(1)
     {
-    cycle_count = 0;
+    cycle_count = 0; // reset the charge cycle counter
+    DDRD |= (1<<PD4); //when it is in output mode the cap starts charging bcs we set the port as high alredy 
+
+
     
 
 
