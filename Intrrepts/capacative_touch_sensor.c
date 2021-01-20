@@ -19,11 +19,11 @@
 #include<avr/interrupt.h>
 #include<avr/power.h>
 #include"USART_liberry/usart.h"
-
+volatile int cycle_count ;
 
 ISR(PCINT2_vect)
 {
-    
+    cycle_count++;
     
 
 }
@@ -44,7 +44,7 @@ int main(void)
     DDRB   = 0xff;
     PORTD |= (1<<PD4);
     
-    volatile int cycle_count ;
+    
 
     while(1)
     {
