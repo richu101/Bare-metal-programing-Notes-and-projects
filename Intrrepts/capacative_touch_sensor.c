@@ -43,6 +43,7 @@ int main(void)
     MCUCR |=(1<<PUD);
     DDRB   = 0xff;
     PORTD |= (1<<PD4);
+    
     volatile int cycle_count ;
 
     while(1)
@@ -54,8 +55,7 @@ int main(void)
     cli(); //disable the global intrrept vect
     if(cycle_count == threshold)
     {
-        PORTB = 0xff:
-    
+        PORTB = 0xff;
     }
     else
     {
