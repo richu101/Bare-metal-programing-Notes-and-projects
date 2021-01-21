@@ -82,16 +82,21 @@ void serialwriteptr(unsigned char *str)
 //Transmit integer through UART
 void serialwriteint(int data)
 {	
+	int rev=0;
 	char d;
-	//put the data to be transmitted into the UDR register
-	while (data>0)
+	while(data>0)
 	{
-	
-		d = data%10 + '0' ;
+		rev=(rev*10)+data%10;
+		data=data/10;
+	}
+	//put the data to be transmitted into the UDR register
+	while (rev>0)
+	{
+		d = rev%10 + '0' ;
 		UDR0 = d;
 		//wait until the transmission is completed
 		while(!(UCSR0A&(1<<UDRE0)));
-		data = data/10;
+		rev = rev/10;
 	}
 	
 		
