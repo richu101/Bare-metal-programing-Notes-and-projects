@@ -21,9 +21,14 @@
 #include"USART_liberry/usart.h"
 volatile int cycle_count ;
 
+
+
 ISR(PCINT2_vect)
 {
-    cycle_count++;
+    cycle_count++; //charge cycle counter
+    DDRD |= (1<<PD4);
+    _delay_us(1);
+    DDRD |= ~(1<<PD4);
     
 
 }
@@ -61,8 +66,9 @@ int main(void)
     {
         PORTB = 0;
     }
-    
+    serialwriteint(cycle_count);
     }
 return (0);
 
 }
+
