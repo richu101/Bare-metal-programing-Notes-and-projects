@@ -87,9 +87,9 @@ void serialnewline()
 }
 
 //Transmit integer through UART
-void serialwriteint(int data)
+void serialwriteint(uint16_t data)
 {	
-	int rev=0;
+	uint16_t rev=0;
 	char d;
 	while(data>0)
 	{
@@ -99,13 +99,9 @@ void serialwriteint(int data)
 	//put the data to be transmitted into the UDR register
 	while (rev>0)
 	{
-<<<<<<< HEAD
 	// most of the serial moniters are reading the data as char so to print a an integer we need to send that integer as charectors
 	
-		d = data%10 + '0' ; // this will convert the int num to correspointing char ascii
-=======
-		d = rev%10 + '0' ;
->>>>>>> 6231a0d849ed7ddfe9388585535edde9801df062
+		d = rev%10 + '0' ; // this will convert the int num to correspointing char ascii
 		UDR0 = d;
 		//wait until the transmission is completed
 		while(!(UCSR0A&(1<<UDRE0)));
