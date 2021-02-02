@@ -74,11 +74,30 @@ void readString(char myString[], uint8_t maxLength) {
   myString[i] = 0;                          /* terminal NULL character */
 }
 
-void printByte(uint8_t byte) {
+void printint(uint8_t byte) {
               /* Converts a byte to a string of decimal text, sends it */
-  transmitByte('0' + (byte / 100));                        /* Hundreds */
-  transmitByte('0' + ((byte / 10) % 10));                      /* Tens */
-  transmitByte('0' + (byte % 10));                             /* Ones */
+  volatile uint8_t count = 0;
+  uint8_t d ;
+  uint8_t val; 
+    
+  while(byte<0)
+  {
+    d = byte;
+    while(d<0)
+  {
+    count++;
+    d = d/10;
+  }
+    while (i<=count)
+    {
+      val *= i;
+      i++;
+    }
+    count=0;
+    transmitByte('0' + (byte/val));
+    byte /= 10;
+  }
+                               /* Ones */
 }
 
 void printWord(uint16_t word) {
