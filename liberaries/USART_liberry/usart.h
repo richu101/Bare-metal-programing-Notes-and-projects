@@ -4,8 +4,7 @@
  * This is a library for USART communication  (Serial communication). 
  * To initialize the USART communication call the serial begin function. This will initialize with baud rate 9600 . If you want to change the baud rate just the value of BAUD to whatever BAUD you want
  * DATA Frame structure - 1 ( start bit and stop bit ) 8 Bit data frame and no parity is used 
-  
- 
+
   ------------------------------------------------------------------------------------------------------------------------------------------
  |                                                                                                                                           |
  |    How USART communication work's ...................?                                                                                    |
@@ -46,113 +45,22 @@ ________________________________________________________________________________
     #define __AVR_ATmega328P__
 #endif
 
-unsigned char string[20];
+#ifndef BAUD
 #define BAUD 9600
+#endif
+
 #define UBBR_VAL ((F_CPU/16/BAUD)-1)
 
 
-void serialbegin()
-{
-	UCSR0B = (1<<TXEN0) | (1<<RXEN0) ;
-	UCSR0C = (1<<UCSZ00) | (1<<UCSZ01);
-	UBRR0L = UBBR_VAL;
-	UBRR0H = UBBR_VAL >> 8;
-}
+void serialbegin(); // This function is to initilize the hardware uart w
 
-//Transmit character through UART
-void serialwritechar(unsigned char data)
-{
-	//put the data to be transmitted into the UDR register
-	UDR0 = data;
+void transmitbyte(uint8_t data);
+uint8_t receivebyte();
 
-	//wait until the transmission is completed
-	while(!(UCSR0A&(1<<UDRE0)));
-}
+void serialwritechar(unsigned char data);
+void serialwriteint(uint16_t data);
 
-//Transmit string through UART
-void serialwriteptr(unsigned char *str)
-{
-	while(*str)
-	{
-		UDR0 = *str++;
-		while(!(UCSR0A&(1<<UDRE0)));
-	}
-}
-void serialnewline()
-{
-	UDR0 = 10; //10 is the ascie for " /n "
-	//wait until the transmission is completed
-		while(!(UCSR0A&(1<<UDRE0)));
-
-}
-
-//Transmit integer through UART
-void serialwriteint(uint16_t data)
-{	
-	uint16_t rev=0;
-	char d;
-	while(data>0)
-	{
-		rev=(rev*10)+data%10;
-		data=data/10;
-	}
-	//put the data to be transmitted into the UDR register
-	while (rev>0)
-	{
-	// most of the serial moniters are reading the data as char so to print a an integer we need to send that integer as charectors
+void  serialwritestr(unsigned char a[20]);
+unsigned char serialreadchar();
+int serialreadint();
 	
-		d = rev%10 + '0' ; // this will convert the int num to correspointing char ascii
-		UDR0 = d;
-		//wait until the transmission is completed
-		while(!(UCSR0A&(1<<UDRE0)));
-		rev = rev/10;
-	}
-	
-		
-}
-void  serialwritestr(unsigned char a[20])
-{
-	unsigned char *ptrval;
-	ptrval = a;
-	serialwriteptr(ptrval);
-}
-
-
-
-	//Receive a character through UART
-	unsigned char serialreadchar()
-	{
-		//wait for the charater
-		while(!(UCSR0A & (1<<RXC0)));
-
-		//return the received charater
-		return(UDR0);
-	}
-	//Receive a integer through UART
-	int serialreadint()
-	{
-		//wait for the value
-		while(!(UCSR0A & (1<<RXC0)));
-
-		//return the received integer
-		return(UDR0);
-	}
-
-	//Receive string through UART
-	unsigned char * serialreadstr()
-	{
-		unsigned char  x, i = 0;
-
-		//receive the characters until a null value is seceived
-		while((x = serialreadchar()) != 0)
-		{
-			//and store the received characters into the array string[] one-by-one
-			string[i++] = x;
-		}
-
-		//insert NULL to terminate the string
-		string[i] = '\0';
-
-		//return the received string
-		return(string);
-	}
