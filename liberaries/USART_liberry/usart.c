@@ -1,132 +1,137 @@
+
 /*
- * USART.c
- *
- * This is a library for USART communication  (Serial communication). 
- * To initialize the USART communication call the serial begin function. This will initialize with baud rate 9600 . If you want to change the baud rate just the value of BAUD to whatever BAUD you want
- * DATA Frame structure - 1 ( start bit and stop bit ) 8 Bit data frame and no parity is used 
-  
- 
-  ------------------------------------------------------------------------------------------------------------------------------------------
- |                                                                                                                                           |
- |    How USART communication work's ...................?                                                                                    |
- |                                                                                                                                           |
- |  The main part of the USART communication is a register named UDR                                                                         |
- |  For receving a data we sending the data to the UDR register and reading it.                                                              |
- |  For sending a data we write the vlue to  the UDR register and the avr shift out the value according to the data frame we set             |
- |                                                                                                                                           |
-  -------------------------------------------------------------------------------------------------------------------------------------------
-_______________________________________________________________________________________________________________________________________________
- ....... How to use the functions in this liberary .......
+  Quick and dirty functions that make serial communications work.
 
-    serialbegin()      - This functon initilise the usart communication with 9600 BAUD rate , 8 bit dataframe and no paritty Bit
-    
-    serialreadchar()   - This function return a single charector that u send through serial monitor
+  Note that receiveByte() blocks -- it sits and waits _forever_ for
+   a byte to come in.  If you're doing anything that's more interesting,
+   you'll want to implement this with interrupts.
 
-    serialreadint()    - This function return an integer num that u send through serial monitor
+   initUSART requires BAUDRATE to be defined in order to calculate
+     the bit-rate multiplier.  9600 is a reasonable default.
 
-    serialreadstr()    - This function return string that u send through serial monitor
+  May not work with some of the older chips:
+    Tiny2313, Mega8, Mega16, Mega32 have different pin macros
+    If you're using these chips, see (e.g.) iom8.h for how it's done.
+    These old chips don't specify UDR0 vs UDR1.
+    Correspondingly, the macros will just be defined as UDR.
+*/
 
-    serialwritechar()  - This print a single character that you send ... eg serialwritechar('a');
+#include <avr/io.h>
+#include "USART.h"
+#include <util/setbaud.h>
 
-    serialwriteint()   - This print integer value that you send ... eg serialwritechar(200);
-
-    serialwritestr()   - This print the string that you send ... eg serialwritechar("hello");
-
-_______________________________________________________________________________________________________________________________________________
-
-
- * Created: 28-08-2020 07:02:34 PM
- * Author : RICHU BINI
- */ 
-
-#include<avr/io.h>
-// #define F_CPU 16000000
-#ifndef __AVR_ATmega328P__ 
-    #define __AVR_ATmega328P__
+void initUSART(void) {                                /* requires BAUD */
+  UBRR0H = UBRRH_VALUE;                        /* defined in setbaud.h */
+  UBRR0L = UBRRL_VALUE;
+#if USE_2X
+  UCSR0A |= (1 << U2X0);
+#else
+  UCSR0A &= ~(1 << U2X0);
 #endif
-
-unsigned char string[20];
-#define BAUD 9600
-#define UBBR_VAL ((F_CPU/16/BAUD)-1)
-
-
-void serialbegin()
-{
-	UCSR0B = (1<<TXEN0) | (1<<RXEN0) ;
-	UCSR0C = (1<<UCSZ00) | (1<<UCSZ01);
-	UBRR0L = UBBR_VAL;
-	UBRR0H = UBBR_VAL >> 8;
+                                  /* Enable USART transmitter/receiver */
+  UCSR0B = (1 << TXEN0) | (1 << RXEN0);
+  UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);   /* 8 data bits, 1 stop bit */
 }
 
-//Transmit character through UART
-void serialwritechar(unsigned char data)
-{
-	//put the data to be transmitted into the UDR register
-	UDR0 = data;
 
-	//wait until the transmission is completed
-	while(!(UCSR0A&(1<<UDRE0)));
-}
-//Transmit integer through UART
-void serialwriteint(int data)
-{
-	//put the data to be transmitted into the UDR register
-	UDR0 = data;
-
-	//wait until the transmission is completed
-	while(!(UCSR0A&(1<<UDRE0)));
-}
-void  serialwritestr(unsigned char a[20])
-{
-	unsigned char * ptrval;
-	ptrval = a;
-	serialwriteptr(ptrval);
+void transmitByte(uint8_t data) {
+                                     /* Wait for empty transmit buffer */
+  loop_until_bit_is_set(UCSR0A, UDRE0);
+  UDR0 = data;                                            /* send data */
 }
 
-//Transmit string through UART
-void serialwriteptr(unsigned char *str)
-{
-	while(*str)
-	{
-		UDR0 = *str++;
-		while(!(UCSR0A&(1<<UDRE0)));
-	}
+uint8_t receiveByte(void) {
+  loop_until_bit_is_set(UCSR0A, RXC0);       /* Wait for incoming data */
+  return UDR0;                                /* return register value */
 }
 
-	//Receive a character through UART
-	unsigned char serialreadchar()
-	{
-		//wait for the charater
-		while(!(UCSR0A & (1<<RXC0)));
 
-		//return the received charater
-		return(UDR0);
-	}
-	//Receive a integer through UART
-	int serialreadint()
-	{
-		//wait for the value
-		while(!(UCSR0A & (1<<RXC0)));
+                       /* Here are a bunch of useful printing commands */
 
-		//return the received integer
-		return(UDR0);
-	}
+void printString(const char myString[]) {
+  uint8_t i = 0;
+  while (myString[i]) {
+    transmitByte(myString[i]);
+    i++;
+  }
+}
 
-	//Receive string through UART
-	unsigned char * serialreadstr()
-	{
-		unsigned char  x, i = 0;
+void readString(char myString[], uint8_t maxLength) {
+  char response;
+  uint8_t i;
+  i = 0;
+  while (i < (maxLength - 1)) {                   /* prevent over-runs */
+    response = receiveByte();
+    transmitByte(response);                                    /* echo */
+    if (response == '\r') {                     /* enter marks the end */
+      break;
+    }
+    else {
+      myString[i] = response;                       /* add in a letter */
+      i++;
+    }
+  }
+  myString[i] = 0;                          /* terminal NULL character */
+}
 
-		//receive the characters until a null value is seceived
-		while((x = serialreadchar()) != 0)
-		{
-			//and store the received characters into the array string[] one-by-one
-			string[i++] = x;
-		}
+void printByte(uint8_t byte) {
+              /* Converts a byte to a string of decimal text, sends it */
+  transmitByte('0' + (byte / 100));                        /* Hundreds */
+  transmitByte('0' + ((byte / 10) % 10));                      /* Tens */
+  transmitByte('0' + (byte % 10));                             /* Ones */
+}
 
-		//insert NULL to terminate the string
-		string[i] = '\0';
+void printWord(uint16_t word) {
+  transmitByte('0' + (word / 10000));                 /* Ten-thousands */
+  transmitByte('0' + ((word / 1000) % 10));               /* Thousands */
+  transmitByte('0' + ((word / 100) % 10));                 /* Hundreds */
+  transmitByte('0' + ((word / 10) % 10));                      /* Tens */
+  transmitByte('0' + (word % 10));                             /* Ones */
+}
 
-		//return the received string
-		return(string);
-	}
+void printBinaryByte(uint8_t byte) {
+                       /* Prints out a byte as a series of 1's and 0's */
+  uint8_t bit;
+  for (bit = 7; bit < 255; bit--) {
+    if (bit_is_set(byte, bit))
+      transmitByte('1');
+    else
+      transmitByte('0');
+  }
+}
+
+char nibbleToHexCharacter(uint8_t nibble) {
+                                   /* Converts 4 bits into hexadecimal */
+  if (nibble < 10) {
+    return ('0' + nibble);
+  }
+  else {
+    return ('A' + nibble - 10);
+  }
+}
+
+void printHexByte(uint8_t byte) {
+                        /* Prints a byte as its hexadecimal equivalent */
+  uint8_t nibble;
+  nibble = (byte & 0b11110000) >> 4;
+  transmitByte(nibbleToHexCharacter(nibble));
+  nibble = byte & 0b00001111;
+  transmitByte(nibbleToHexCharacter(nibble));
+}
+
+uint8_t getNumber(void) {
+  // Gets a numerical 0-255 from the serial port.
+  // Converts from string to number.
+  char hundreds = '0';
+  char tens = '0';
+  char ones = '0';
+  char thisChar = '0';
+  do {                                                   /* shift over */
+    hundreds = tens;
+    tens = ones;
+    ones = thisChar;
+    thisChar = receiveByte();                   /* get a new character */
+    transmitByte(thisChar);                                    /* echo */
+  } while (thisChar != '\r');                     /* until type return */
+  return (100 * (hundreds - '0') + 10 * (tens - '0') + ones - '0');
+}
