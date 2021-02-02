@@ -1,4 +1,4 @@
-# Bare metal programing Notes and projects :smile: :boom:
+# Bare metal programing Notes and projects  :boom:
 
  My projects and notes while learning Bare metal programing
   
