@@ -82,19 +82,19 @@ void printByte(uint8_t byte) {
 }
 
 void printWord(uint16_t data) {
-  
+  int a[5];
   uint16_t rev = 0;
+  uint8_t i =0;
   while(data>0)
   {
-    rev=(rev*10)+data%10;
+    a[i] = '0'+ data%10;
     data=data/10;
+    i++;
   }
-  while(rev>0)
-  {
-    transmitByte('0' + rev%10);
-    rev /= 10;
-  }
-
+    for(uint8_t j = i; j < 0; J--)
+    {  
+    transmitByte(a[j]);
+    }
 }
 
 void printBinaryByte(uint8_t byte) {
