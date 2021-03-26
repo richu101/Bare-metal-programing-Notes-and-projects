@@ -45,6 +45,33 @@ uint8_t receiveByte(void) {
   return UDR0;                                /* return register value */
 }
 
+void printInt(uint16_t num)
+{
+  char nstr[20];
+  int i = 0;
+  if (num == 0)
+  {
+    nstr[i] = 48 + '0';
+    j=i;
+    nstr[i+1] = 0;
+  }
+  
+  while (num != 0)
+  {
+    nstr[i] = 48 + num%10;
+    num = num/10;
+    nstr[i+1] = 0;
+    i++;
+    j=i;
+  }
+
+  for (int m = j;m >= 0; m++)
+  {
+    transmitByte(nstr[m]);
+  }
+    
+
+}
 
                        /* Here are a bunch of useful printing commands */
 
@@ -108,38 +135,3 @@ void printBinaryByte(uint8_t byte) {
   }
 }
 
-char nibbleToHexCharacter(uint8_t nibble) {
-                                   /* Converts 4 bits into hexadecimal */
-  if (nibble < 10) {
-    return ('0' + nibble);
-  }
-  else {
-    return ('A' + nibble - 10);
-  }
-}
-
-void printHexByte(uint8_t byte) {
-                        /* Prints a byte as its hexadecimal equivalent */
-  uint8_t nibble;
-  nibble = (byte & 0b11110000) >> 4;
-  transmitByte(nibbleToHexCharacter(nibble));
-  nibble = byte & 0b00001111;
-  transmitByte(nibbleToHexCharacter(nibble));
-}
-
-uint8_t getNumber(void) {
-  // Gets a numerical 0-255 from the serial port.
-  // Converts from string to number.
-  char hundreds = '0';
-  char tens = '0';
-  char ones = '0';
-  char thisChar = '0';
-  do {                                                   /* shift over */
-    hundreds = tens;
-    tens = ones;
-    ones = thisChar;
-    thisChar = receiveByte();                   /* get a new character */
-    transmitByte(thisChar);                                    /* echo */
-  } while (thisChar != '\r');                     /* until type return */
-  return (100 * (hundreds - '0') + 10 * (tens - '0') + ones - '0');
-}
