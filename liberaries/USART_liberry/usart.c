@@ -20,8 +20,8 @@
 #include "usart.h"
 #include <util/setbaud.h>
 #define F_CPU 16000000 
-void initUSART(void) {                                /* requires BAUD */
-  UBRR0H = UBRRH_VALUE;                        /* defined in setbaud.h */
+void initUSART(void) {                         /* requires BAUD */
+  UBRR0H = UBRRH_VALUE;                       /* defined in setbaud.h */
   UBRR0L = UBRRL_VALUE;
 #if USE_2X
   UCSR0A |= (1 << U2X0);
@@ -47,33 +47,27 @@ uint8_t receiveByte(void) {
 
 void printInt(uint16_t num)
 {
-  char nstr[20];
-  int i = 0;
-  if (num == 0)
-  {
-    nstr[i] = 48 + '0';
-    j=i;
-    nstr[i+1] = 0;
-  }
-  
-  while (num != 0)
-  {
-    nstr[i] = 48 + num%10;
-    num = num/10;
-    nstr[i+1] = 0;
-    i++;
-    j=i;
-  }
+int str[10];
+int i = 0;
+if (num == 0)
+{
+  str[i] = 0;
+}
 
-  for (int m = j;m >= 0; m++)
-  {
-    transmitByte(nstr[m]);
-  }
-    
+while (num != 0)
+{
+  str[i] = num%10;
+  num = num/10;
+  i++;
+}
+for (uint8_t j = i; j>=0; j--)
+{
+  transmitByte(str[j]+48);
+}
 
 }
 
-                       /* Here are a bunch of useful printing commands */
+ /* Here are a bunch of useful printing commands */
 
 void printString(const char myString[]) {
   uint8_t i = 0;
@@ -101,12 +95,6 @@ void readString(char myString[], uint8_t maxLength) {
   myString[i] = 0;                          /* terminal NULL character */
 }
 
-void printByte(uint8_t byte) {
-              /* Converts a byte to a string of decimal text, sends it */
-  transmitByte('0' + (byte / 100));                        /* Hundreds */
-  transmitByte('0' + ((byte / 10) % 10));                      /* Tens */
-  transmitByte('0' + (byte % 10));                             /* Ones */
-}
 
 void printWord(uint16_t data) {
   int a[5];
@@ -118,7 +106,7 @@ void printWord(uint16_t data) {
     data=data/10;
     i++;
   }
-    for(uint8_t j = i; j < 0; J--)
+    for(uint8_t j = i; j < 0; j--)
     {  
     transmitByte(a[j]);
     }
