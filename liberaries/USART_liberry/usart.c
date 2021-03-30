@@ -47,11 +47,12 @@ uint8_t receiveByte(void) {
 
 void printInt(uint16_t num)
 {
-int str[10];
+int str[6];
 int i = 0;
 if (num == 0)
 {
   str[i] = 0;
+  i++;
 }
 
 while (num != 0)
@@ -60,7 +61,7 @@ while (num != 0)
   num = num/10;
   i++;
 }
-for (uint8_t j = i; j>=0; j--)
+for (uint8_t j = i-1; j>=0; j--)
 {
   transmitByte(str[j]+48);
 }
