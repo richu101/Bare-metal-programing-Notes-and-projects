@@ -97,21 +97,6 @@ void readString(char myString[], uint8_t maxLength) {
 }
 
 
-void printWord(uint16_t data) {
-  int a[5];
-  uint16_t rev = 0;
-  uint8_t i =0;
-  while(data>0)
-  {
-    a[i] = '0'+ data%10;
-    data=data/10;
-    i++;
-  }
-    for(uint8_t j = i; j < 0; j--)
-    {  
-    transmitByte(a[j]);
-    }
-}
 
 
 
