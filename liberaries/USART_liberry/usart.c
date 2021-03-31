@@ -113,14 +113,5 @@ void printWord(uint16_t data) {
     }
 }
 
-void printBinaryByte(uint8_t byte) {
-                       /* Prints out a byte as a series of 1's and 0's */
-  uint8_t bit;
-  for (bit = 7; bit < 255; bit--) {
-    if (bit_is_set(byte, bit))
-      transmitByte('1');
-    else
-      transmitByte('0');
-  }
-}
+
 
