@@ -21,7 +21,9 @@ void initUSART(void);
    When you call receiveByte() your program will hang until
    data comes through.  We'll improve on this later. */
 void transmitByte(uint8_t data);
+ // transmitt 8 bit value through usart
 uint8_t receiveByte(void);
+// recieve 8 bit value from usart
 
 void printString(const char myString[]);
              /* Utility function to transmit an entire string from RAM */
@@ -29,17 +31,7 @@ void readString(char myString[], uint8_t maxLength);
 /* Define a string variable, pass it to this function
    The string will contain whatever you typed over serial */
 
-void printByte(uint8_t byte);
-                  /* Prints a byte out as its 3-digit ascii equivalent */
-void printWord(uint16_t data);
-        /* Prints a word (16-bits) out as its 5-digit ascii equivalent */
 
-void printBinaryByte(uint8_t byte);
-                                     /* Prints a byte out in 1s and 0s */
-char nibbleToHex(uint8_t nibble);
-char nibbleToHexCharacter(uint8_t nibble);
-void printHexByte(uint8_t byte);
-                                   /* Prints a byte out in hexadecimal */
-uint8_t getNumber(void);
-/* takes in up to three ascii digits,
- converts them to a byte when press enter */
+void printInt(uint16_t num);
+
+// print numbers using usart ( 16 bit value maximun )
