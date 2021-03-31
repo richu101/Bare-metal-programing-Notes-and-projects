@@ -47,11 +47,11 @@ uint8_t receiveByte(void) {
 
 void printInt(uint16_t num)
 {
-int str[5];
+uint8_t str[5];
 int i = 0;
 if (num == 0)
 {
-  str[i] = 48;
+  str[i] = '0';
   i++;
 }
 while (num > 0)
@@ -59,18 +59,15 @@ while (num > 0)
   str[i] = num%10;
   num = num/10;
   i++;
+
 }
 
-transmitByte(48+i);
-/*
-for (uint8_t j = i-1; j>=0; j--)
+
+for (int j = i-1; j>=0; j--)
 {
   transmitByte(str[j]+48);
-  _delay_ms(400);
 }
-
 }
-*/
  /* Here are a bunch of useful printing commands */
 
 void printString(const char myString[]) {
