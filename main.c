@@ -15,10 +15,23 @@ int main(void)
     initUSART();
     while(1)
     {
-        _delay_ms(100);
-        transmitByte(8);
-        printInt(627);
-        _delay_ms(3000);
+    
+        if(bit_is_set(PIND,PD2))
+        {
+        transmitByte(12);
+        printString("on");
+        PORTB ^= 0xff;        
+        _delay_ms(30);
+        }
+        else
+        {
+            transmitByte(12);
+            printString("off");
+        }
+        
+
+
+
     }
     return (0);
 
