@@ -16,9 +16,20 @@ ISR(INT0_vect)
     // falling edge will trigger this intrrept
     if(bit_is_set(PIND,PIND2))
     {
-        i = 1;
-        transmitByte(12);
-        printString("on");
+        PORTB ^= (0xff);
+        if (PORTB)
+        {
+            transmitByte(12);
+            printString("on");
+        }
+        if (PORTB==0)
+        {
+            transmitByte(12);
+            printString("off");
+        }
+        
+        
+        
     }
 
 
@@ -26,6 +37,7 @@ ISR(INT0_vect)
 void external_intrrept_init()
 {
     EIMSK |= (1<<INT0);
+    EICRA |= (1<<ISC01);
     EICRA |= (1<<ISC00);  //Any logic change in int0 will trigger the intrrept 
     sei();
 }
@@ -38,16 +50,6 @@ int main(void)
     while(1)
     {
     
-        while(i==1)
-        {
-        PORTB = 0xff;        
-        }
-        if(i == 0)
-        {
-            PORTB = 0;
-        }
-        
-
     }
     return (0);
 
