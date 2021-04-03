@@ -1,5 +1,5 @@
 #Main application file name
-MAIN_APP = external_intrrept
+MAIN_APP = main
 #Main hex file path in windows format
 MAIN_HEX_PATH = /home/pi/Documents/Bare-metal-programing-Notes-and-projects/$(MAIN_APP).hex
 
