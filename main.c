@@ -8,7 +8,7 @@
 #include<avr/interrupt.h>
 #include"liberaries/USART_liberry/usart.c"
 
-
+volatile int i;
 int main(void)
 {
     DDRB = 0xff; 
@@ -27,6 +27,7 @@ int main(void)
         {
             transmitByte(12);
             printString("off");
+            _delay_ms(30);
         }
         
 
