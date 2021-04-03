@@ -4,8 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "/usr/lib/avr/include"
-                // here you need to include the path to all the liberaries that u used
+                "/usr/lib/avr/include",
+                "/home/pi/Documents/Bare-metal-programing-Notes-and-projects/liberaries"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/avr-gcc", // here u need to add the path to avr-gcc
