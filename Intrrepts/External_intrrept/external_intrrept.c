@@ -21,17 +21,17 @@
 ISR(INT0_vect)
 {
     // falling edge will trigger this intrrept
-    // if(bit_is_clear(PIND,PIND2))
-    //{
+     if(bit_is_clear(PIND,PIND2))
+    {
         PORTB = 0;
-        _delay_ms(1000);
-    //}
+        
+    }
 
 }
 void external_intrrept_init()
 {
     EIMSK |= (1<<INT0);
-    EICRA |= (1<<ISC01);  //The falling edge of INT0 generates an interrupt request.
+    EICRA |= (1<<ISC00);  //The falling edge of INT0 generates an interrupt request.
     sei();
 }
 

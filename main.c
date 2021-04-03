@@ -8,30 +8,45 @@
 #include<avr/interrupt.h>
 #include"liberaries/USART_liberry/usart.c"
 
-volatile int i;
-int main(void)
+
+volatile uint8_t i;
+
+ISR(INT0_vect)
+{
+    // falling edge will trigger this intrrept
+    if(bit_is_set(PIND,PIND2))
+    {
+        i = 1;
+        transmitByte(12);
+        printString("on");
+    }
+
+
+}
+void external_intrrept_init()
+{
+    EIMSK |= (1<<INT0);
+    EICRA |= (1<<ISC00);  //Any logic change in int0 will trigger the intrrept 
+    sei();
+}
+int main(void)          
 {
     DDRB = 0xff; 
     initUSART();
+    DDRD |= (0<<PD2);  //setting PD2 pin as output mode
+    external_intrrept_init();
     while(1)
     {
     
-        if(bit_is_set(PIND,PD2))
+        while(i==1)
         {
-        transmitByte(12);
-        printString("on");
-        PORTB ^= 0xff;        
-        _delay_ms(30);
+        PORTB = 0xff;        
         }
-        else
+        if(i == 0)
         {
-            transmitByte(12);
-            printString("off");
-            _delay_ms(30);
+            PORTB = 0;
         }
         
-
-
 
     }
     return (0);
