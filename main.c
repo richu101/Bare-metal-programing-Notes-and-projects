@@ -28,8 +28,6 @@ ISR(INT0_vect)
             printString("off");
         }
         
-        
-        
     }
 
 
