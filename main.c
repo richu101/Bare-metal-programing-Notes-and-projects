@@ -47,7 +47,6 @@ int main(void)
     external_intrrept_init();
     while(1)
     {
-    
     }
     return (0);
 
