@@ -9,7 +9,8 @@
 #include"liberaries/USART_liberry/usart.c"
 void init_timer1()
 {
-    
+    TCCR1B |= (1<<CS11) | (1<<CS10);
+    // set the clock speed 1MHz / 64
 }
 
 int main(void)          
