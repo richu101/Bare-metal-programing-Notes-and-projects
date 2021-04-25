@@ -6,7 +6,7 @@
 #include<avr/io.h>
 #include<util/delay.h>
 #include<avr/interrupt.h>
-#include"liberaries/USART_liberry/usart.h"
+#include"liberaries/USART_liberry/usart.c"
 void init_timer1()
 {
     TCCR1B |= (1<<CS11) | (1<<CS10);
@@ -18,8 +18,10 @@ int main(void)
 {
     initUSART();
     init_timer1();
+    DDRB = (1<<PB5);
     while(1)
     {
+
     }
     return (0);
 
