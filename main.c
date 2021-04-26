@@ -15,13 +15,33 @@ void init_timer1()
 }
 
 int main(void)          
-{
+{   
+    char byte;
+    uint16_t timerval;
     initUSART();
     init_timer1();
     DDRB = (1<<PB5);
+    printString("get ready");
     while(1)
     {
+        byte = receiveByte();
+        printString("get reade .... \n");
+        _delay_ms(500);
+        PORTB |= (1<<PB5);
+        TCNT1 = 0;
+        if(bit_is_set(PIND,PD2))
+        {
+            printString("no cheeting /n    ");
 
+        }
+        else
+        {
+            loop_until_bit_is_set(PIND,PD2);
+            timerval = TCNT1;
+        }
+        
+
+        
     }
     return (0);
 
