@@ -21,26 +21,31 @@ int main(void)
     initUSART();
     init_timer1();
     DDRB = (1<<PB5);
-    printString("get ready");
+    printString("get ready ..\n");
     while(1)
     {
-        byte = receiveByte();
+
         printString("get reade .... \n");
-        _delay_ms(500);
         PORTB |= (1<<PB5);
+        _delay_ms(500);
+        PORTB = 0;
+        transmitByte(13);
+        printString("start noww...");
         TCNT1 = 0;
         if(bit_is_set(PIND,PD2))
         {
-            printString("no cheeting /n    ");
-
+            printString("no cheeting..\n    ");
         }
         else
-        {
+        {   
             loop_until_bit_is_set(PIND,PD2);
             timerval = TCNT1;
+            TCNT1 = 0;
+            printString("your reaction time id .....");
+            printInt(timerval);
+            transmitByte(13); // clear the terminal set the curser to 0 th position
         }
         
-
         
     }
     return (0);
