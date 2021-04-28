@@ -27,6 +27,7 @@ int main(void)
 
         printString("get reade .... \n");
         PORTB |= (1<<PB5);
+        byte = receiveByte();
         _delay_ms(500);
         PORTB = 0;
         transmitByte(13);
