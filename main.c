@@ -21,7 +21,6 @@ int main(void)
     initUSART();
     init_timer1();
     DDRB = (1<<PB5);
-    printString("get ready ..\n");
     while(1)
     {
 
@@ -31,7 +30,7 @@ int main(void)
         _delay_ms(500);
         PORTB = 0;
         transmitByte(13);
-        printString("start noww...");
+        printString("Go >>");
         TCNT1 = 0;
         if(bit_is_set(PIND,PD2))
         {
@@ -42,7 +41,7 @@ int main(void)
             loop_until_bit_is_set(PIND,PD2);
             timerval = TCNT1;
             TCNT1 = 0;
-            printString("your reaction time id .....");
+            printString("your reaction time is .....");
             printInt(timerval);
             transmitByte(13); // clear the terminal set the curser to 0 th position
         }
