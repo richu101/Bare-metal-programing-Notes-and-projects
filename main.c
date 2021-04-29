@@ -22,14 +22,14 @@ int main(void)
     init_timer1();
     DDRB = (1<<PB5);
     while(1)
+    
     {
 
-        printString("get reade .... \n");
+        printString("ready .... \n");
         byte = receiveByte();
         PORTB |= (1<<PB5);
         _delay_ms(500);
         PORTB = 0;
-        transmitByte(13);
         printString("Go >>");
         TCNT1 = 0;
         if(bit_is_set(PIND,PD2))
