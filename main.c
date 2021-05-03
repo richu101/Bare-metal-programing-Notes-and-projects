@@ -18,7 +18,7 @@ void init_timer1()
 void playNote(uint16_t period, uint16_t duration) {
   uint16_t elapsed;
   uint16_t i;
-  for (elapsed = 0; elapsed < duration; elapsed += period) {
+  for (elapsed = 0; elapsed < duration; elapsed +=  period) {
                      /* For loop with variable delay selects the pitch */
     for (i = 0; i < period; i++) {
       _delay_us(1);
@@ -32,17 +32,17 @@ int main(void)
     while(1)
     
     {   
-        playNote(23,7000);
-_delay_ms(50);        
-        playNote(20,4000);
+        playNote(230,1);
+// _delay_ms(50);        
+        playNote(400,4);
+// _delay_ms(50);
+        playNote(600,3);
+// _delay_ms(50);
+playNote(7000,20);
 _delay_ms(50);
-        playNote(100,3000);
+playNote(6000,10);
 _delay_ms(50);
-playNote(70,2000);
-_delay_ms(50);
-playNote(60,2000);
-_delay_ms(50);
-playNote(50,2000);
+playNote(5000,1);
 
 _delay_ms(500);
 
