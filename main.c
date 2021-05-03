@@ -15,29 +15,48 @@ void init_timer1()
     // set the clock speed 16MHz / 64
     // 16/64 tick of the clock will increase the timer value by 1
 }
-void playnote(uint8_t pitch, uint8_t duratation)
-{
-    for(int8_t i = 0;i<=pitch;i++)
-    {
-        PORTB ^= (1<<5);
-        for(int8_t i = 0;i<=duratation;i++)
-            _delay_ms(1);
+void playNote(uint16_t period, uint16_t duration) {
+  uint16_t elapsed;
+  uint16_t i;
+  for (elapsed = 0; elapsed < duration; elapsed += period) {
+                     /* For loop with variable delay selects the pitch */
+    for (i = 0; i < period; i++) {
+      _delay_us(1);
     }
+    PORTB ^= (1 << PB5);
+  }
 }
 int main(void)          
 {   
-    DDRB |= (1<<5);
+    DDRB |= (1<<PB5);
     while(1)
     
     {   
-        playnote(159,200);
+        playNote(23,7000);
+_delay_ms(50);        
+        playNote(20,4000);
+_delay_ms(50);
+        playNote(100,3000);
+_delay_ms(50);
+playNote(70,2000);
+_delay_ms(50);
+playNote(60,2000);
+_delay_ms(50);
+playNote(50,2000);
+
+_delay_ms(500);
+
+        playNote(43,200);
+        _delay_ms(500);
+
+        /* playnote(159,200);
         _delay_ms(100);
         playnote(59,210);
         _delay_ms(100);
         playnote(90,110);
         _delay_ms(100);
         playnote(54,169);
-
+*/
         
     }
         
