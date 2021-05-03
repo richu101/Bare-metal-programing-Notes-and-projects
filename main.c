@@ -15,16 +15,24 @@ void init_timer1()
     // set the clock speed 16MHz / 64
     // 16/64 tick of the clock will increase the timer value by 1
 }
-
+void playnorte(uint8_t pitch, uint8_t duratation)
+{
+    for(int8_t i = 0;i<=pitch;i++)
+    {
+        PORTB ^= (1<<2);
+        for(int8_t i = 0;i<=duratation;i++)
+            _delay_ms(1);
+    }
+}
 int main(void)          
 {   
-   
+    DDRB |= (1<<2);
     while(1)
     
-    {
-
+    {   
+    
         
-        }
+    }
         
         
     }
