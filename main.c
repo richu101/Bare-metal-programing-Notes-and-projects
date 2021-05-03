@@ -33,11 +33,11 @@ int main(void)
     
     {   
         playNote(230,1);
-// _delay_ms(50);        
+_delay_ms(50);        
         playNote(400,4);
-// _delay_ms(50);
+_delay_ms(50);
         playNote(600,3);
-// _delay_ms(50);
+_delay_ms(50);
 playNote(7000,20);
 _delay_ms(50);
 playNote(6000,10);
