@@ -10,21 +10,21 @@
 void init_timer1()
 {   
     TCCR0A |= (1<<WGM01);
-    
+    // enable the counter to work in ctc(clear timer on compare) mode
     TCCR1B |= (1<<CS11) | (1<<CS10);
     // set the clock speed 16MHz / 64
     // 16/64 tick of the clock will increase the timer value by 1
 }
-void playNote(uint16_t period, uint16_t duration) {
-  uint16_t elapsed;
-  uint16_t i;
-  for (elapsed = 0; elapsed < duration; elapsed +=  period) {
-                     /* For loop with variable delay selects the pitch */
-    for (i = 0; i < period; i++) {
-      _delay_us(1);
+void playNote(uint16_t wavelength, uint16_t duration) {
+
+    DDRD |= (1<<PD6);
+    OCR0A = wavelength;
+    while (duration)
+    {
+        _delay_ms(1);
+        duration--;
     }
-    PORTB ^= (1 << PB5);
-  }
+  
 }
 int main(void)          
 {   
@@ -32,31 +32,7 @@ int main(void)
     while(1)
     
     {   
-        playNote(230,1);
-_delay_ms(50);        
-        playNote(400,4);
-_delay_ms(50);
-        playNote(600,3);
-_delay_ms(50);
-playNote(7000,20);
-_delay_ms(50);
-playNote(6000,10);
-_delay_ms(50);
-playNote(5000,1);
-
-_delay_ms(500);
-
-        playNote(43,200);
-        _delay_ms(500);
-
-        /* playnote(159,200);
-        _delay_ms(100);
-        playnote(59,210);
-        _delay_ms(100);
-        playnote(90,110);
-        _delay_ms(100);
-        playnote(54,169);
-*/
+      
         
     }
         
