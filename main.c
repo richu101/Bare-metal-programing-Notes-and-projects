@@ -11,9 +11,12 @@ void init_timer1()
 {   
     TCCR0A |= (1<<WGM01);
     // enable the counter to work in ctc(clear timer on compare) mode
+    TCCR0A |= (1<<COM0A0);
+    // toggle OC0A on compare match
     TCCR1B |= (1<<CS11) | (1<<CS10);
     // set the clock speed 16MHz / 64
     // 16/64 tick of the clock will increase the timer value by 1
+    
 }
 void playNote(uint16_t wavelength, uint16_t duration) {
 
@@ -32,8 +35,7 @@ int main(void)
     while(1)
     
     {   
-      
-        
+        playNote(25,3000);
     }
         
         
