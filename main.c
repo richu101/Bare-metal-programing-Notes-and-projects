@@ -27,11 +27,13 @@ void playNote(uint16_t wavelength, uint16_t duration) {
         _delay_ms(1);
         duration--;
     }
+    DDRD &= ~(1<<PD6);
   
 }
 int main(void)          
 {   
     DDRB |= (1<<PB5);
+    init_timer1();
     while(1)
     
     {   
