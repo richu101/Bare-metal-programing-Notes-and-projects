@@ -24,11 +24,10 @@ static inline void playNote(uint8_t wavelength, uint8_t duration) {
     DDRB |= (1<<PB1);
     while (duration)
     {
-        _delay_us(1);
+        _delay_ms(1);
         duration--;
     }
     DDRB &= ~(1<<PB1);
-  
 }
 int main(void)          
 {   
