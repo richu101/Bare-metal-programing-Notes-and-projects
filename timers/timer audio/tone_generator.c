@@ -18,8 +18,8 @@
 
 #include<avr/io.h>
 #include<util/delay.h>
-#include<avr/interrupt.h>
-#include"liberaries/USART_liberry/usart.c"
+#include"musicnote.h"
+
 static inline void init_timer1()
 {   
     
@@ -52,20 +52,20 @@ int main(void)
 //        DDRB |= (1<<PB1);
 //        PORTB ^= (1<<PB1);
 //        _delay_ms(100);
-        playNote(100,200);
-        playNote(200,200);
-        playNote(200,100);
-        playNote(200,150);
+        playNote(G3,200);
+        playNote(F3,200);
+        playNote(E3,100);
+        playNote(Gx2,150);
+        _delay_ms(G1;
+        playNote(E1,200);
+        playNote(A0,200);
+        playNote(Ax0,100);
+        playNote(Ax2,150);
         _delay_ms(400);
-        playNote(50,200);
-        playNote(100,200);
-        playNote(60,100);
-        playNote(23,150);
-        _delay_ms(400);
-        playNote(200,140);
-        playNote(100,150);
-        playNote(130,140);
-        playNote(253,105);
+        playNote(B0,140);
+        playNote(B1,150);
+        playNote(Ax2,140);
+        playNote(Ax1,105);
         _delay_ms(400);
 
     }
