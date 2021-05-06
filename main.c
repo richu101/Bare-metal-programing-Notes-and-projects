@@ -11,23 +11,23 @@ static inline void init_timer1()
 {   
     // TCCR1A |= (1<<WGM12);
     // enable the counter to work in ctc(clear timer on compare) mode
-    TCCR1A |= (1<<COM1A0)  ;
+    TCCR0A |= (1<<COM1A0) | (1<<WGM01);
     // toggle OC0A on compare match
-    TCCR1B |= (1<<CS10)| (1<<CS11) | (1<<WGM12);
+    TCCR0B |= (1<<CS00)| (1<<CS01) ;
     // set the clock speed 16MHz / 64
     // 16/64 tick of the clock will increase the timer value by 1
     
 }
 static inline void playNote(uint8_t wavelength, uint8_t duration) {
 
-    OCR1A = wavelength;
-    DDRB |= (1<<PB1);
+    OCR0A = wavelength;
+    DDRD |= (1<<PD6);
     while (duration)
     {
         _delay_ms(1);
         duration--;
     }
-    DDRB &= (0<<PB1);
+    DDRD &= (0<<PD6);
 }
 int main(void)          
 {   
