@@ -1,3 +1,16 @@
+/* 
+-------------------------------------------------------------------------------
+|   
+|   This program create tone signal in PD6 (12 th pin) pin 
+|   Here we use the ctc mode of timer 0 (clear timer on compare match)
+|   
+|   HOW it works .....!
+|
+|   when the timer value reaches the value in OCRxn register
+|   it will togle the OCnx pin
+|
+--------------------------------------------------------------------------------
+*/
 #ifndef __AVR_ATmega328P__ 
     #define __AVR_ATmega328P__
 #endif
@@ -9,7 +22,7 @@
 #include"liberaries/USART_liberry/usart.c"
 static inline void init_timer1()
 {   
-    // TCCR1A |= (1<<WGM12);
+    
     // enable the counter to work in ctc(clear timer on compare) mode
     TCCR0A |= (1<<COM1A0) | (1<<WGM01);
     // toggle OC0A on compare match
