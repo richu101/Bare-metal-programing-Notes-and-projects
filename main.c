@@ -39,10 +39,10 @@ int main(void)
 //        DDRB |= (1<<PB1);
 //        PORTB ^= (1<<PB1);
 //        _delay_ms(100);
-        playNote(43,20);
-        playNote(13,200);
-        playNote(13,100);
-        playNote(31,150);
+        playNote(100,200);
+        playNote(200,200);
+        playNote(200,100);
+        playNote(200,150);
         _delay_ms(400);
         playNote(50,200);
         playNote(100,200);
