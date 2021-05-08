@@ -18,8 +18,10 @@
 
 #include<avr/io.h>
 #include<util/delay.h>
-#include<avr/interrupt.h>
+#include"timers/timer audio/musicnote.h"
 #include"liberaries/USART_liberry/usart.c"
+
+int  i = 1;
 static inline void init_timer1()
 {   
     
@@ -44,34 +46,81 @@ static inline void playNote(uint8_t wavelength, uint8_t duration) {
 }
 int main(void)          
 {   
-    // DDRB |= (1<<PB5);
-    init_timer1();
-    while(1)
-    
-    {   
-//        DDRB |= (1<<PB1);
-//        PORTB ^= (1<<PB1);
+        DDRD |= (0<<PD2);
+        init_timer1();
+        uint8_t buttonstate , ledstate = 1, pstate = 1;
+
+while(1)
+
+{   
+        DDRB |= (1<<PB1);
+        PORTB ^= (1<<PB1);
 //        _delay_ms(100);
-        playNote(100,200);
-        playNote(200,200);
-        playNote(200,100);
-        playNote(200,150);
-        _delay_ms(400);
-        playNote(50,200);
-        playNote(100,200);
-        playNote(60,100);
-        playNote(23,150);
-        _delay_ms(400);
-        playNote(200,140);
-        playNote(100,150);
-        playNote(130,140);
-        playNote(253,105);
-        _delay_ms(400);
+buttonstate = PIND & (1<<PD2);
+if (buttonstate != pstate)
+{
+        pstate = buttonstate;
+        if (buttonstate)
+        {
+                DDRB |= (1<<PB5);
+                PORTB ^= (1<<PB5);
+if (bit_is_set(PORTB,PB5))
+{
+        playNote(C1,200);
+                playNote(C1,200);
+                playNote(C1,200);
+        playNote(D1,200);
+                playNote(D1,200);
+                playNote(D1,200);
+        playNote(E1,200);
+                playNote(E1,200);
+                playNote(E1,200);        
+        playNote(F1,200);
+                playNote(F1,200);
+                playNote(F1,200);        
+        playNote(G1,200);
+                playNote(G1,200);
+                playNote(G1,200);
+        playNote(A1,200);
+                playNote(A1,200);
+                playNote(A1,200);
+        playNote(B1,200);
+                playNote(B1,200);
+                playNote(B1,200);
+        playNote(C1,200);
+                playNote(C1,200);
+                playNote(C1,200);
+
+        playNote(C2,200);
+                playNote(C2,200);
+                playNote(C2,200);
+        playNote(B2,200);
+                playNote(B2,200);
+                playNote(B2,200);
+        playNote(A2,200);
+                playNote(A2,200);
+                playNote(A2,200);
+        playNote(G2,200);
+                playNote(G2,200);
+                playNote(G2,200);
+        playNote(F2,200);
+                playNote(F2,200);
+                playNote(F2,200);
+        playNote(E2,200);
+                playNote(E2,200);
+                playNote(E2,200);
+        playNote(D2,200);
+                playNote(D2,200);
+                playNote(D2,200);
+        playNote(C2,200);
+                playNote(C2,200);
+                playNote(C2,200);
+
+}
+        }
+}
 
     }
-        
-        
-    
     return (0);
 
 }

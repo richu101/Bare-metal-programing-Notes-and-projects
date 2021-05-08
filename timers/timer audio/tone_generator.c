@@ -52,22 +52,59 @@ int main(void)
 //        DDRB |= (1<<PB1);
 //        PORTB ^= (1<<PB1);
 //        _delay_ms(100);
-        playNote(G3,200);
-        playNote(F3,200);
-        playNote(E3,100);
-        playNote(Gx2,150);
-        _delay_ms(G1;
+        playNote(C1,200);
+                playNote(C1,200);
+                playNote(C1,200);
+        playNote(D1,200);
+                playNote(D1,200);
+                playNote(D1,200);
         playNote(E1,200);
-        playNote(A0,200);
-        playNote(Ax0,100);
-        playNote(Ax2,150);
-        _delay_ms(400);
-        playNote(B0,140);
-        playNote(B1,150);
-        playNote(Ax2,140);
-        playNote(Ax1,105);
-        _delay_ms(400);
+                playNote(E1,200);
+                playNote(E1,200);        
+        playNote(F1,200);
+                playNote(F1,200);
+                playNote(F1,200);        
+        playNote(G1,200);
+                playNote(G1,200);
+                playNote(G1,200);
+        playNote(A1,200);
+                playNote(A1,200);
+                playNote(A1,200);
+        playNote(B1,200);
+                playNote(B1,200);
+                playNote(B1,200);
+        playNote(C1,200);
+                playNote(C1,200);
+                playNote(C1,200);
 
+        playNote(C2,200);
+                playNote(C2,200);
+                playNote(C2,200);
+        playNote(B2,200);
+                playNote(B2,200);
+                playNote(B2,200);
+        playNote(A2,200);
+                playNote(A2,200);
+                playNote(A2,200);
+        playNote(G2,200);
+                playNote(G2,200);
+                playNote(G2,200);
+        playNote(F2,200);
+                playNote(F2,200);
+                playNote(F2,200);
+        playNote(E2,200);
+                playNote(E2,200);
+                playNote(E2,200);
+        playNote(D2,200);
+                playNote(D2,200);
+                playNote(D2,200);
+        playNote(C2,200);
+                playNote(C2,200);
+                playNote(C2,200);
+
+        _delay_ms(4000);
+//        playNote(C1,150);
+       
     }
         
         
