@@ -90,32 +90,6 @@ if (bit_is_set(PORTB,PB5))
         playNote(C1,200);
                 playNote(C1,200);
                 playNote(C1,200);
-
-        playNote(C2,200);
-                playNote(C2,200);
-                playNote(C2,200);
-        playNote(B2,200);
-                playNote(B2,200);
-                playNote(B2,200);
-        playNote(A2,200);
-                playNote(A2,200);
-                playNote(A2,200);
-        playNote(G2,200);
-                playNote(G2,200);
-                playNote(G2,200);
-        playNote(F2,200);
-                playNote(F2,200);
-                playNote(F2,200);
-        playNote(E2,200);
-                playNote(E2,200);
-                playNote(E2,200);
-        playNote(D2,200);
-                playNote(D2,200);
-                playNote(D2,200);
-        playNote(C2,200);
-                playNote(C2,200);
-                playNote(C2,200);
-
 }
         }
 }
