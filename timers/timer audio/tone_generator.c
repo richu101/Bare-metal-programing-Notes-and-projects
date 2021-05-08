@@ -12,7 +12,7 @@
 --------------------------------------------------------------------------------
 */
 #ifndef __AVR_ATmega328P__ 
-    #define __AVR_ATmega328P__
+        #define __AVR_ATmega328P__
 #endif
 #define F_CPU 16000000UL
 
@@ -22,19 +22,19 @@
 
 static inline void init_timer1()
 {   
-    
+
     // enable the counter to work in ctc(clear timer on compare) mode
-    TCCR0A |= (1<<COM1A0) | (1<<WGM01);
+        TCCR0A |= (1<<COM1A0) | (1<<WGM01);
     // toggle OC0A on compare match
-    TCCR0B |= (1<<CS00)| (1<<CS01) ;
+        TCCR0B |= (1<<CS00)| (1<<CS01) ;
     // set the clock speed 16MHz / 64
     // 16/64 tick of the clock will increase the timer value by 1
-    
+
 }
 static inline void playNote(uint8_t wavelength, uint8_t duration) {
 
-    OCR0A = wavelength;
-    DDRD |= (1<<PD6);
+        OCR0A = wavelength;
+        DDRD |= (1<<PD6);
     while (duration)
     {
         _delay_ms(1);
@@ -103,9 +103,7 @@ int main(void)
 //        playNote(C1,150);
        
     }
-        
-        
-    
-    return (0);
+
+return (0);
 
 }
