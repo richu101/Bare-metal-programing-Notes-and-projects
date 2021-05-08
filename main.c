@@ -55,7 +55,7 @@ while(1)
 {   
         DDRB |= (1<<PB1);
         PORTB ^= (1<<PB1);
-//        _delay_ms(100);
+
 buttonstate = PIND & (1<<PD2);
 if (buttonstate != pstate)
 {
