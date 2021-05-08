@@ -49,10 +49,7 @@ int main(void)
     while(1)
     
     {   
-//        DDRB |= (1<<PB1);
-//        PORTB ^= (1<<PB1);
-//        _delay_ms(100);
-        playNote(C1,200);
+
                 playNote(C1,200);
                 playNote(C1,200);
         playNote(D1,200);
