@@ -19,6 +19,25 @@
 #include<avr/io.h>
 #include<util/delay.h>
 #include"musicnote.h"
+#include<avr/interrupt.h>
+volatile int8_t i=0;
+ISR(INT0_vect)
+{
+    // falling edge will trigger this intrrept
+     if(bit_is_clear(PIND,PIND2))
+    {
+        i ^= i;
+        
+    }
+
+}
+void external_intrrept_init()
+{
+    EIMSK |= (1<<INT0);
+    EICRA |= (1<<ISC00);  //The falling edge of INT0 generates an interrupt request.
+    sei();
+}
+
 
 static inline void init_timer1()
 {   
@@ -44,11 +63,11 @@ static inline void playNote(uint8_t wavelength, uint8_t duration) {
 }
 int main(void)          
 {   
-    // DDRB |= (1<<PB5);
     init_timer1();
+    external_intrrept_init();
     while(1)
     
-    {   
+        {   
 
                 playNote(C1,200);
                 playNote(C1,200);
@@ -100,9 +119,8 @@ int main(void)
                 playNote(C2,200);
 
         _delay_ms(4000);
-//        playNote(C1,150);
-       
-    }
+        
+        }
 
 return (0);
 
