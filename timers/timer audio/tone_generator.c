@@ -68,7 +68,8 @@ int main(void)
     while(1)
     
         {   
-
+        if(i)
+        {
                 playNote(C1,200);
                 playNote(C1,200);
         playNote(D1,200);
@@ -121,7 +122,7 @@ int main(void)
         _delay_ms(4000);
         
         }
-
+        }
 return (0);
 
 }
