@@ -5,5 +5,8 @@
   ### IN THIS I AM USING ATMEL STUDIO AS IDE
   
   ### mcu = ATmega328p
+  
+  u can use any avr mcus
+    ATMEL
   :boom:
   :octocat:
