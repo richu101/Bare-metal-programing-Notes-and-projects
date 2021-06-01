@@ -62,44 +62,43 @@ while(1)
         PORTB ^= (1<<PB1);
 
 buttonstate = PIND & (1<<PD2);
-if (buttonstate != pstate)
-{
-        pstate = buttonstate;
-        if (buttonstate)
+        if (buttonstate != pstate)
         {
-                DDRB |= (1<<PB5);
-                PORTB ^= (1<<PB5);
-                if (bit_is_set(PORTB,PB5))
+                pstate = buttonstate;
+                if (buttonstate)
                 {
-                        playNote(C1,200);
+                        DDRB |= (1<<PB5);
+                        PORTB ^= (1<<PB5);
+                        if (bit_is_set(PORTB,PB5))
+                        {
                                 playNote(C1,200);
-                                playNote(C1,200);
-                        playNote(D1,200);
+                                        playNote(C1,200);
+                                        playNote(C1,200);
                                 playNote(D1,200);
-                                playNote(D1,200);
-                        playNote(E1,200);
+                                        playNote(D1,200);
+                                        playNote(D1,200);
                                 playNote(E1,200);
-                                playNote(E1,200);        
-                        playNote(F1,200);
+                                        playNote(E1,200);
+                                        playNote(E1,200);        
                                 playNote(F1,200);
-                                playNote(F1,200);        
-                        playNote(G1,200);
+                                        playNote(F1,200);
+                                        playNote(F1,200);        
                                 playNote(G1,200);
-                                playNote(G1,200);
-                        playNote(A1,200);
+                                        playNote(G1,200);
+                                        playNote(G1,200);
                                 playNote(A1,200);
-                                playNote(A1,200);
-                        playNote(B1,200);
+                                        playNote(A1,200);
+                                        playNote(A1,200);
                                 playNote(B1,200);
-                                playNote(B1,200);
-                        playNote(C1,200);
+                                        playNote(B1,200);
+                                        playNote(B1,200);
                                 playNote(C1,200);
-                                playNote(C1,200);
+                                        playNote(C1,200);
+                                        playNote(C1,200);
+                        }
                 }
         }
 }
-
-    }
-    return (0);
+return (0);
 
 }

@@ -1,4 +1,3 @@
-
 /* 
 -------------------------------------------------------------------------------
 |   
@@ -35,7 +34,12 @@ static inline void init_timer1()
     
 }
 static inline void playNote(uint8_t wavelength, uint8_t duration) {
-
+/* 
+        This function willl toggle the OC0A pin (PD6) when the value of the 
+        counter reach the wavelength value (This set the freequency). 
+        
+        And this last for duration * 1 ms
+*/
     OCR0A = wavelength;
     DDRD |= (1<<PD6);
     while (duration)
@@ -58,44 +62,43 @@ while(1)
         PORTB ^= (1<<PB1);
 
 buttonstate = PIND & (1<<PD2);
-if (buttonstate != pstate)
-{
-        pstate = buttonstate;
-        if (buttonstate)
+        if (buttonstate != pstate)
         {
-                DDRB |= (1<<PB5);
-                PORTB ^= (1<<PB5);
-if (bit_is_set(PORTB,PB5))
-{
-        playNote(C1,200);
-                playNote(C1,200);
-                playNote(C1,200);
-        playNote(D1,200);
-                playNote(D1,200);
-                playNote(D1,200);
-        playNote(E1,200);
-                playNote(E1,200);
-                playNote(E1,200);        
-        playNote(F1,200);
-                playNote(F1,200);
-                playNote(F1,200);        
-        playNote(G1,200);
-                playNote(G1,200);
-                playNote(G1,200);
-        playNote(A1,200);
-                playNote(A1,200);
-                playNote(A1,200);
-        playNote(B1,200);
-                playNote(B1,200);
-                playNote(B1,200);
-        playNote(C1,200);
-                playNote(C1,200);
-                playNote(C1,200);
-}
+                pstate = buttonstate;
+                if (buttonstate)
+                {
+                        DDRB |= (1<<PB5);
+                        PORTB ^= (1<<PB5);
+                        if (bit_is_set(PORTB,PB5))
+                        {
+                                playNote(C1,200);
+                                        playNote(C1,200);
+                                        playNote(C1,200);
+                                playNote(D1,200);
+                                        playNote(D1,200);
+                                        playNote(D1,200);
+                                playNote(E1,200);
+                                        playNote(E1,200);
+                                        playNote(E1,200);        
+                                playNote(F1,200);
+                                        playNote(F1,200);
+                                        playNote(F1,200);        
+                                playNote(G1,200);
+                                        playNote(G1,200);
+                                        playNote(G1,200);
+                                playNote(A1,200);
+                                        playNote(A1,200);
+                                        playNote(A1,200);
+                                playNote(B1,200);
+                                        playNote(B1,200);
+                                        playNote(B1,200);
+                                playNote(C1,200);
+                                        playNote(C1,200);
+                                        playNote(C1,200);
+                        }
+                }
         }
 }
-
-    }
-    return (0);
+return (0);
 
 }
