@@ -1,3 +1,4 @@
+
 #Main application file name
 MAIN_APP = main
 #Main hex file path in windows format
@@ -51,4 +52,3 @@ $(MAIN_APP).elf: $(MAIN_APP).o
 	
 $(MAIN_APP).o:$(SRC)
 	$(CC) $^ $(INCLUDE) $(CFLAGS) $@
-

@@ -1,13 +1,13 @@
 /* 
 -------------------------------------------------------------------------------
 |   
-|   This program create tone signal in PD6 (12 th pin) pin 
-|   Here we use the ctc mode of timer 0 (clear timer on compare match)
+|   Just a basic blink code
 |   
-|   HOW it works .....!
+|   This code works fine with mcu workin in 16Mhz clk freequency
+|   
 |
-|   when the timer value reaches the value in OCRxn register
-|   it will togle the OCnx pin
+|   
+|   
 |
 --------------------------------------------------------------------------------
 */

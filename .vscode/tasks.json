@@ -10,7 +10,7 @@
             "args": [
                 
             ],
-            "group": "build",
+            "group": "build",  // this will exicute the Build function in the make file
             "presentation": {
                 // Reveal the output only if unrecognized errors occur.
                 "reveal": "silent"
