@@ -4,13 +4,16 @@ MAIN_APP = main
 #Main hex file path in windows format
 MAIN_HEX_PATH = /home/pi/Documents/Bare-metal-programing-Notes-and-projects/$(MAIN_APP).hex
 
+PROGRAMMER_TYPE = usbasp #or usbtiny
+# extra arguments to avrdude: baud rate, chip type, -F flag, etc.
+PROGRAMMER_ARGS = 	
 # Compiler and other Section
 CC = avr-gcc
 #   JCOPY = avr-objcopy
 # avr-objcopy -oihex -R .eeprom blink.elf blink.hex
 OBJCOPY = avr-objcopy
 AVRDUDE := avrdude
-
+MCU = atmega328p
 #Options for avr-gcc
 CFLAGS = -g -Os -o
 
@@ -43,7 +46,7 @@ INCLUDE = -I.
 # commands Section
 
 Burn : Build
-	$(AVRDUDE) $(DUDEFLAGS)
+	$(AVRDUDE) $(DUDEFLAGS) 
 Build : $(MAIN_APP).elf
 	$(OBJCOPY) $(HFLAGS) $< $(MAIN_APP).hex
 	
@@ -52,3 +55,26 @@ $(MAIN_APP).elf: $(MAIN_APP).o
 	
 $(MAIN_APP).o:$(SRC)
 	$(CC) $^ $(INCLUDE) $(CFLAGS) $@
+
+LFUSE = 0x62
+HFUSE = 0xdf
+EFUSE = 0x00
+
+## Generic 
+FUSE_STRING = -U lfuse:w:$(LFUSE):m -U hfuse:w:$(HFUSE):m -U efuse:w:$(EFUSE):m 
+
+fuses: 
+	$(AVRDUDE) -c $(PROGRAMMER_TYPE) -F -p $(MCU) \
+	           $(PROGRAMMER_ARGS) $(FUSE_STRING) 
+show_fuses:
+	$(AVRDUDE)  -c $(PROGRAMMER_TYPE) -p $(MCU) $(PROGRAMMER_ARGS) -nv	
+
+## Called with no extra definitions, sets to defaults
+set_default_fuses:  FUSE_STRING = -U lfuse:w:$(LFUSE):m -U hfuse:w:$(HFUSE):m -U efuse:w:$(EFUSE):m 
+set_default_fuses:  fuses
+
+## Set the fuse byte for full-speed mode
+## Note: can also be set in firmware for modern chips
+set_fast_fuse: LFUSE = 0xE2
+set_fast_fuse: FUSE_STRING = -U lfuse:w:$(LFUSE):m 
+set_fast_fuse: fuses
