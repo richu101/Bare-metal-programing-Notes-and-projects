@@ -64,7 +64,7 @@ EFUSE = 0x00
 FUSE_STRING = -U lfuse:w:$(LFUSE):m -U hfuse:w:$(HFUSE):m -U efuse:w:$(EFUSE):m 
 
 fuses: 
-	$(AVRDUDE) -c $(PROGRAMMER_TYPE) -F -p $(MCU) \
+	$(AVRDUDE) -c $(PROGRAMMER_TYPE) -p $(MCU) \
 	           $(PROGRAMMER_ARGS) $(FUSE_STRING) 
 show_fuses:
 	$(AVRDUDE)  -c $(PROGRAMMER_TYPE) -p $(MCU) $(PROGRAMMER_ARGS) -nv	
