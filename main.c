@@ -1,7 +1,7 @@
 #ifndef __AVR_ATmega328P__ 
     #define __AVR_ATmega328P__
 #endif
-#define F_CPU 16000000UL
+#define F_CPU 8000000UL
 /*
 #include<avr/io.h>
 #include<util/delay.h>
@@ -26,7 +26,7 @@ static inline void init_timer1()
 #include <pindefine.h>
 #include <scale16.h>
 
-#define COUNTER_VALUE   5            /* determines carrier frequency */
+#define COUNTER_VALUE   3          /* determines carrier frequency */
 
 // From f = f_cpu / ( 2* N* (1 + OCRnx) )
 // Good values for the AM band from 2 to 6: pick one that's clear
@@ -41,7 +41,7 @@ static inline void init_timer1()
 
 static inline void initTimer0(void) {
   TCCR0A |= (1 << WGM01);                                  /* CTC mode */
-  TCCR0A |= (1 << COM0B0);            /* Toggles pin each time through */
+  TCCR0A |= (1 << COM0B0);            /* Toggles OC0B(PD5) pin  each time through */
   TCCR0B |= (1 << CS00);              /* Clock at CPU frequency, ~8MHz */
   OCR0A = COUNTER_VALUE;                          /* carrier frequency */
 }
@@ -70,26 +70,26 @@ static inline void transmitBeep(uint16_t pitch, uint16_t duration) {
 int main(void) {
   // -------- Inits --------- //
 
-  clock_prescale_set(clock_div_2);                  /* CPU clock 8 MHz */
+  // clock_prescale_set(clock_div_1);                  /* CPU clock 8 MHz */
   initTimer0();
   initTimer1();
 
   // ------ Event loop ------ //
   while (1) {
-/*
+
     transmitBeep(E3, 200);
     _delay_ms(100);
-    transmitBeep(E3, 200);
+    transmitBeep(D3, 200);
     _delay_ms(200);
     transmitBeep(E3, 200);
     _delay_ms(200);
     
-    transmitBeep(C3, 200);
     transmitBeep(E3, 200);
+    transmitBeep(A3, 200);
     _delay_ms(200);
-    transmitBeep(G3, 400);
+    transmitBeep(D3, 400);
     _delay_ms(500);
-    transmitBeep(G2, 400);
+    transmitBeep(E3, 400);
 
     _delay_ms(250);
 
