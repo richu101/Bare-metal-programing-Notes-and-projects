@@ -43,6 +43,7 @@ void transmitBeep(uint16_t pitch,uint16_t duration)
   while(duration >= 1)
   {
     _delay_ms(1);
+    duration--;
   }
   cli();
 
