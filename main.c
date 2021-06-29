@@ -22,6 +22,36 @@
 // 8Mhz / (2 * 1 * (1+5)) = 670 kHz
 // 8Mhz / (2 * 1 * (1+6)) = 570 kHz
 // 8Mhz / (2 * 1 * (1+7)) = 500 kHz
+static inline void init_Timer0()
+{
+  TCCR0A |= (1<<COM0A0); // Toggle OC0A(PD6) on compare match
+  TCCR0A |= (1<<WGM01);
+  TCCR0B |= (1<<CS01);
+  OCR0A = COUNTER_VALUE;
+}
+static inline void init_timer1()
+{ 
+  TIMSK1 |= (1<<OCIE1A); // Intrrept will enable when the timer value reaches the value in OCR1A
+  TCCR1B |= (1<<WGM12);  // ctc mode
+  TCCR1B |= (1 << CS11);  
+}
+
+void transmitBeep(uint16_t pitch,uint16_t duration)
+{ 
+  OCR1A = pitch;
+  sei();
+  while(duration >= 1)
+  {
+    _delay_ms(1);
+  }
+  cli();
+
+  DDRD |= (1<<PD6);
+}
+ISR(TIMER1_COMPA_vect)
+{
+  DDRD ^= (1<<PD6);
+}
 
 int main()
 {
