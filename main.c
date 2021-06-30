@@ -25,26 +25,25 @@
 static inline void init_Timer0()
 {
   TCCR0A |= (1<<COM0A0); // Toggle OC0A(PD6) on compare match
-  TCCR0A |= (1<<WGM01);
-  TCCR0B |= (1<<CS01);
+  TCCR0A |= (1<<WGM01); // ctc mode enable
+  TCCR0B |= (1<<CS00); // Timer work at 8MHz
   OCR0A = COUNTER_VALUE;
 }
 static inline void init_timer1()
 { 
   TIMSK1 |= (1<<OCIE1A); // Intrrept will enable when the timer value reaches the value in OCR1A
   TCCR1B |= (1<<WGM12);  // ctc mode
-  TCCR1B |= (1 << CS11);  
+  TCCR1B |= (1 << CS11);  // IMPUT CLK / 8
 }
 
 void transmitBeep(uint16_t pitch,uint16_t duration)
 { 
   OCR1A = pitch;
   sei();
-  while(duration >= 1)
-  {
-    _delay_ms(1);
+  do {
+    _delay_ms(1);                            /* delay for pitch cycles */
     duration--;
-  }
+  } while (duration > 0);
   cli();
 
   DDRD |= (1<<PD6);
@@ -52,26 +51,45 @@ void transmitBeep(uint16_t pitch,uint16_t duration)
 ISR(TIMER1_COMPA_vect)
 {
   DDRD ^= (1<<PD6);
+  
 }
 
 int main()
 {
+  DDRB |= (1<<PB5);
+  DDRD |= (1<<PD6);
+  init_Timer0();
+  init_timer1();
   while (1) {
-
-    transmitBeep(E3, 200);
-    _delay_ms(100);
-    transmitBeep(D3, 200);
-    _delay_ms(200);
-    transmitBeep(E3, 200);
-    _delay_ms(200);
+    PORTB ^= (1<<PB5);
+    transmitBeep(C1,200);
+                                        transmitBeep(C1,200);
+                                        transmitBeep(C1,200);
+                                transmitBeep(D1,200);
+                                        transmitBeep(D1,200);
+                                        transmitBeep(D1,200);
+                                transmitBeep(E1,200);
+                                        transmitBeep(E1,200);
+                                        transmitBeep(E1,200);        
+                                transmitBeep(F1,200);
+                                        transmitBeep(F1,200);
+                                        transmitBeep(F1,200);        
+                                transmitBeep(G1,200);
+                                        transmitBeep(G1,200);
+                                        transmitBeep(G1,200);
+                                transmitBeep(A1,200);
+                                        transmitBeep(A1,200);
+                                        transmitBeep(A1,200);
+                                transmitBeep(B1,200);
+                                        transmitBeep(B1,200);
+                                        transmitBeep(B1,200);
+                                transmitBeep(C1,200);
+                                        transmitBeep(C1,200);
+                                        transmitBeep(C1,200);
     
-    transmitBeep(E3, 200);
-    transmitBeep(A3, 200);
-    _delay_ms(200);
-    transmitBeep(D3, 400);
-    _delay_ms(500);
-    transmitBeep(E3, 400);
-
+//    _delay_ms(250);
+//    transmitBeep(E3, 400);
+//  PORTB |= (0<<PB5);
     _delay_ms(250);
 
   }                                                  /* End event loop */
