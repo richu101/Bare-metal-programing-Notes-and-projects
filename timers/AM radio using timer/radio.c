@@ -64,30 +64,34 @@ int main()
   init_timer1();
   while (1) {
     PORTB ^= (1<<PB5);
-        transmitBeep(C1,200);
-            transmitBeep(Cx0,200);
-            transmitBeep(Cx0,200);
+    transmitBeep(C1,200);
+            transmitBeep(C1,200);
+            transmitBeep(C1,200);
     transmitBeep(D1,200);
-            transmitBeep(D0,200);
-            transmitBeep(D0,200);
+            transmitBeep(D1,200);
+            transmitBeep(D1,200);
     transmitBeep(E1,200);
-            transmitBeep(E,200);
-            transmitBeep(E,200);        
+            transmitBeep(E1,200);
+            transmitBeep(E1,200);        
     transmitBeep(F1,200);
-            transmitBeep(Fx0,200);
-            transmitBeep(Fx0,200);        
+            transmitBeep(F1,200);
+            transmitBeep(F1,200);        
     transmitBeep(G1,200);
-            transmitBeep(Gx0,200);
-            transmitBeep(Gx0,200);
+            transmitBeep(G1,200);
+            transmitBeep(G1,200);
     transmitBeep(A1,200);
-            transmitBeep(Ax0,200);
-            transmitBeep(Ax0,200);
+            transmitBeep(A1,200);
+            transmitBeep(A1,200);
     transmitBeep(B1,200);
             transmitBeep(B1,200);
             transmitBeep(B1,200);
     transmitBeep(C1,200);
-            transmitBeep(Cx0,200);
-            transmitBeep(Cx0,200);
+            transmitBeep(C1,200);
+            transmitBeep(C1,200);
+
+//    _delay_ms(250);
+//    transmitBeep(E3, 400);
+//  PORTB |= (0<<PB5);
     _delay_ms(250);
 
   }                                                  /* End event loop */
