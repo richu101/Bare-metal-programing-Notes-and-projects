@@ -45,7 +45,7 @@ int main(void)
     
     while(1)
     {
-    PORTB = 0xff;
+    PORTB ^= 0xff;
     _delay_ms(1000);
     // PORTB = (0<<5);
     // _delay_ms(100);

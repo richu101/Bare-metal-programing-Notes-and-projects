@@ -55,41 +55,60 @@ ISR(TIMER1_COMPA_vect)
   // this intrrept add tone to the AM carriern wave 
   
 }
+ISR(INT0_vect)
+{
+    // falling edge will trigger this intrrept
+     if(bit_is_set(PIND,PIND2))
+    {
+        PORTB ^= (1<<5);
+        
+    }
+
+}
+void external_intrrept_init()
+{
+    EIMSK |= (1<<INT0);
+    EICRA |= (1<<ISC00);  //The falling edge of INT0 generates an interrupt request.
+    sei();
+}
 
 int main()
-{
-  DDRB |= (1<<PB5);
-  DDRD |= (1<<PD6);
-  init_Timer0();
-  init_timer1();
-  while (1) {
-    PORTB ^= (1<<PB5);
+        {
+        DDRB |= (1<<PB5);
+        DDRD |= (1<<PD6);
+        init_Timer0();
+        init_timer1();
+        external_intrrept_init();
+        while (1) {
+    // PORTB ^= (1<<PB5);
+    // if(bit_is_set(PIND,PD2))
+    // {
         transmitBeep(C1,200);
-            transmitBeep(Cx0,200);
-            transmitBeep(Cx0,200);
-    transmitBeep(D1,200);
-            transmitBeep(D0,200);
-            transmitBeep(D0,200);
-    transmitBeep(E1,200);
-            transmitBeep(E,200);
-            transmitBeep(E,200);        
-    transmitBeep(F1,200);
-            transmitBeep(Fx0,200);
-            transmitBeep(Fx0,200);        
-    transmitBeep(G1,200);
-            transmitBeep(Gx0,200);
-            transmitBeep(Gx0,200);
-    transmitBeep(A1,200);
-            transmitBeep(Ax0,200);
-            transmitBeep(Ax0,200);
-    transmitBeep(B1,200);
-            transmitBeep(B1,200);
-            transmitBeep(B1,200);
-    transmitBeep(C1,200);
-            transmitBeep(Cx0,200);
-            transmitBeep(Cx0,200);
-    _delay_ms(250);
-
+                transmitBeep(Cx0,200);
+                transmitBeep(Cx0,200);
+        transmitBeep(D1,200);
+                transmitBeep(D0,200);
+                transmitBeep(D0,200);
+        transmitBeep(E1,200);
+                transmitBeep(E,200);
+                transmitBeep(E,200);        
+        transmitBeep(F1,200);
+                transmitBeep(Fx0,200);
+                transmitBeep(Fx0,200);        
+        transmitBeep(G1,200);
+                transmitBeep(Gx0,200);
+                transmitBeep(Gx0,200);
+        transmitBeep(A1,200);
+                transmitBeep(Ax0,200);
+                transmitBeep(Ax0,200);
+        transmitBeep(B1,200);
+                transmitBeep(B1,200);
+                transmitBeep(B1,200);
+        transmitBeep(C1,200);
+                transmitBeep(Cx0,200);
+                transmitBeep(Cx0,200);
+        _delay_ms(5000);
+//    }
   }                                                  /* End event loop */
   return 0;                            /* This line is never reached */
 }
