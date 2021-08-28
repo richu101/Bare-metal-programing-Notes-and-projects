@@ -1,5 +1,11 @@
-
-
+/*
+    ------------------------------------------------------------------------
+    #   This program is to fade an led using pwm
+    #   here the pwm is generated just using program not using timers
+    #
+    #
+    #
+*/
 #ifndef __AVR_ATmega328P__ 
     #define __AVR_ATmega328P__
 #endif
