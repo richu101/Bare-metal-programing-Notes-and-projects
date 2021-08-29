@@ -33,12 +33,9 @@ void pwmgenerator(uint8_t dutycycle)
         {
             PORTB = 0xff;
         }
-        
         _delay_us(duratation);
         }
 }
-
-
 
 int main()
 {
@@ -48,12 +45,10 @@ int main()
     uint8_t brightness = 0;
         while (1)
     {   
-    
         if(brightness == 0) direction = 1;
         if(brightness == 255) direction= -1;
         brightness += direction; 
         pwmgenerator(brightness);
     }
-
     return (0);
 }
