@@ -1,56 +1,32 @@
 /*
-    ------------------------------------------------------------------------
-    #   This program is to fade an led using pwm
-    #   here the pwm is generated just using program not using timers
-    #
-    #
-    #
+    | ------------------------------------------------------------------------
+    |   This program is to ffade an led using hardware pwm 
+    |   Here we are using ttimer 1 & 2 runnin in ctc mode 
+    |   The counter counts from BOTTOM to TOP then restarts from BOTTOM. 
+    |   In non-inverting compare output mode, the output compare (OC1x) 
+    |   is cleared on the compare match between TCNT1 and OCR1x, and set at BOTTOM
 */
-#ifndef __AVR_ATmega328P__ 
-    #define __AVR_ATmega328P__
+#ifndef __AVR_ATmega328P__
+#define __AVR_ATmega328P__
 #endif
 #define F_CPU 8000000UL
 /* PWM Learning Codes */
-#include <avr/io.h>                        /* Defines pins, ports, etc */
-#include <util/delay.h>                     /* Functions to waste time */
+#include <avr/io.h>     /* Defines pins, ports, etc */
+#include <util/delay.h> /* Functions to waste time */
 
 #define duratation 20
 
-void pwmgenerator(uint8_t dutycycle)
+void timer1init(uint8_t dutycycle)
 {
-    
-    uint8_t i = 0;
-    for(i =0; i < 255; i++)
-        {
-        if (i >= dutycycle)
-        {
-            PORTB = 0;
-        }
-        else
-        {
-            PORTB = 0xff;
-        }
-        
-        _delay_us(duratation);
-        }
+    TCCR1B |= (1<<WGM12) ; // | fast pwm with 8 bit
+    TCCR1A |= (1<<WGM10) ; // | fast pwm with 8 bit
+    TCCR1B |= (1<<CS11);   // | clk prescalr div / 8
+    TCCR1A |= (1<<COM1A1); // | Clear OC1B on compare match when up-counting
+    TCCR1A |= (1<<COM1B1); // | Clear OC1B on compare match when up-counting
 }
-
-
 
 int main()
 {
-                
-    DDRB = 0xff; // Set the DDRB port in OUTPUT mode
-    uint8_t direction = 1;
-    uint8_t brightness = 0;
-        while (1)
-    {   
-    
-        if(brightness == 0) direction = 1;
-        if(brightness == 255) direction= -1;
-        brightness += direction; 
-        pwmgenerator(brightness);
-    }
 
     return (0);
 }
