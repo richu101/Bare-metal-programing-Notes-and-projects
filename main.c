@@ -1,14 +1,16 @@
 /* 
 -------------------------------------------------------------------------------
 |   
-|   This program create tone signal in PD6 (12 th pin) pin 
-|   Here we use the ctc mode of timer 0 (clear timer on compare match)
+|   This progtam is to create a pwm signal using the timer 1 
+|   16 bit timer 
+|   in this the pwm is generated using the phase corrected pwm mode
 |   
-|   HOW it works .....!
-|
-|   when the timer value reaches the value in OCRxn register
-|   it will togle the OCnx pin
-|
+|   
+|   The freequency of the pwm can be calculatedd using this equatation
+|                
+|    fOCnxPCPWM =  f_clk_IO / 2 * prescaler divider * TOP 
+|   
+|   
 --------------------------------------------------------------------------------
 */
 #ifndef __AVR_ATmega328P__ 
@@ -18,8 +20,7 @@
 
 #include<avr/io.h>
 #include<util/delay.h>
-// #include"timers/timer audio/musicnote.h"
-// #include"liberaries/USART_liberry/usart.c"
+
 void pwm (int i)
 {
    DDRB |= (1 << DDB1);
@@ -39,7 +40,7 @@ int main(void)
    while (1)
    {
     PORTB ^=(1<<PB5);
-    _delay_us(1000);
+    _delay_us(3000);
     i++;
     if (i==1023)
     {
