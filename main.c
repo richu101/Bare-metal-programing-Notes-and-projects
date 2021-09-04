@@ -20,22 +20,32 @@
 #include<util/delay.h>
 // #include"timers/timer audio/musicnote.h"
 // #include"liberaries/USART_liberry/usart.c"
-
-int main(void)
+void pwm (int i)
 {
    DDRB |= (1 << DDB1);
    // PB1 as output
-   OCR1A = 100;
-   // set PWM for 50% duty cycle at 10bit
+   OCR1A = i;
+   // set PWM duty cycle at 10bit
    TCCR1A |= (1 << COM1A1);
    // set non-inverting mode(clear on comapre match)
    TCCR1A |= (1 << WGM11) | (1 << WGM10);
    // set 10bit phase corrected PWM Mode
    TCCR1B |= (1 << CS11);
    // set prescaler to 8 and starts PWM
+}
+int main(void)
+{
+  int i = 0 ;
    while (1)
    {
     PORTB ^=(1<<PB5);
-    _delay_ms(200); 
+    _delay_us(1000);
+    i++;
+    if (i==1023)
+    {
+      i = 0;
+    }
+     
+   pwm(i);
    }
 }
