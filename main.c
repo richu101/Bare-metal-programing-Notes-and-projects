@@ -1,41 +1,41 @@
-/*
-    | ------------------------------------------------------------------------
-    |   This program is to ffade an led using hardware pwm 
-    |   Here we are using ttimer 1 & 2 runnin in ctc mode 
-    |   The counter counts from BOTTOM to TOP then restarts from BOTTOM. 
-    |   In non-inverting compare output mode, the output compare (OC1x) 
-    |   is cleared on the compare match between TCNT1 and OCR1x, and set at BOTTOM
+/* 
+-------------------------------------------------------------------------------
+|   
+|   This program create tone signal in PD6 (12 th pin) pin 
+|   Here we use the ctc mode of timer 0 (clear timer on compare match)
+|   
+|   HOW it works .....!
+|
+|   when the timer value reaches the value in OCRxn register
+|   it will togle the OCnx pin
+|
+--------------------------------------------------------------------------------
 */
-#ifndef __AVR_ATmega328P__
-#define __AVR_ATmega328P__
+#ifndef __AVR_ATmega328P__ 
+    #define __AVR_ATmega328P__
 #endif
-#define F_CPU 8000000UL
-/* PWM Learning Codes */
-#include <avr/io.h>     /* Defines pins, ports, etc */
-#include <util/delay.h> /* Functions to waste time */
+#define F_CPU 16000000UL
 
-#define duratation 20
+#include<avr/io.h>
+#include<util/delay.h>
+// #include"timers/timer audio/musicnote.h"
+// #include"liberaries/USART_liberry/usart.c"
 
-void timer1init(uint8_t dutycycle)
+int main(void)
 {
-// Timer 1 (16 bit timer) initilazation
-
-    TCCR1B |= (1<<WGM12) ; // | fast pwm with 8 bit
-    TCCR1A |= (1<<WGM10) ; // | fast pwm with 8 bit
-    TCCR1B |= (1<<CS11);   // | clk prescalr div / 8
-    TCCR1A |= (1<<COM1A1); // | Clear OC1A on compare match when up-counting
-    TCCR1A |= (1<<COM1B1); // | Clear OC1B on compare match when up-counting
-// Timer 2 (8 bit timer) initilazation
-
-    TCCR2A |= (1<<WGM20) ; // | fast pwm with 8 bit
-    TCCR2A |= (1<<WGM21) ; // | fast pwm with 8 bit
-    TCCR2B |= (1<<CS21);   // | clk prescalr div / 8
-    TCCR2A |= (1<<COM2A1); // | Clear OC2A on compare match, set OC2A at BOTTOM,(non-inverting mode).
-    
-}
-
-int main()
-{
-    DDRB
-    return (0);
+   DDRB |= (1 << DDB1);
+   // PB1 as output
+   OCR1A = 100;
+   // set PWM for 50% duty cycle at 10bit
+   TCCR1A |= (1 << COM1A1);
+   // set non-inverting mode(clear on comapre match)
+   TCCR1A |= (1 << WGM11) | (1 << WGM10);
+   // set 10bit phase corrected PWM Mode
+   TCCR1B |= (1 << CS11);
+   // set prescaler to 8 and starts PWM
+   while (1)
+   {
+    PORTB ^=(1<<PB5);
+    _delay_ms(200); 
+   }
 }
