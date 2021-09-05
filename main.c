@@ -3,7 +3,7 @@
 |   
 |   This progtam is to create a pwm signal using the timer 1 
 |   16 bit timer 
-|   in this the pwm is generated using the phase corrected pwm mode
+|   in this the pwm is generated using the fast pwm mode
 |   
 |   
 |   The freequency of the pwm can be calculatedd using this equatation
@@ -13,40 +13,45 @@
 |   
 --------------------------------------------------------------------------------
 */
-#ifndef __AVR_ATmega328P__ 
+#ifndef __AVR_ATmega328P__     
     #define __AVR_ATmega328P__
 #endif
 #define F_CPU 16000000UL
 
 #include<avr/io.h>
 #include<util/delay.h>
-
-void pwm (int i)
+#include<liberaries/USART_liberry/usart.h>
+void init_Timers(uint8_t i)
 {
    DDRB |= (1 << DDB1);
-   // PB1 as output
+   DDRB |= (1 << DDB2);
+   // PB1 and PB2 as output
    OCR1A = i;
-   // set PWM duty cycle at 10bit
+   OCR1B = OCR1A;
    TCCR1A |= (1 << COM1A1);
+   TCCR1A |= (1 << COM1B1);
    // set non-inverting mode(clear on comapre match)
-   TCCR1A |= (1 << WGM11) | (1 << WGM10);
-   // set 10bit phase corrected PWM Mode
+   TCCR1A |= (1 << WGM10);
+   TCCR1B |= (1<<WGM12);
+   // set 8bit fast PWM Mode
    TCCR1B |= (1 << CS11);
    // set prescaler to 8 and starts PWM
+
+     
 }
 int main(void)
 {
-  int i = 0 ;
+  uint8_t i = 0 ;
+  uint8_t direction = 0;
+//  initUSART();
    while (1)
    {
-    PORTB ^=(1<<PB5);
-    _delay_us(3000);
-    i++;
-    if (i==1023)
-    {
-      i = 0;
-    }
-     
-   pwm(i);
+    // PORTB ^= (1<<PB5);
+   // printString("enter the duty cycle :")
+    _delay_us(5000);
+    i += direction;
+    if (i==255)direction = -1;
+    if (i==0)direction = 1;
+   init_Timers(i);
    }
 }
