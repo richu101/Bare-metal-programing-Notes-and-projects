@@ -20,7 +20,7 @@
 
 #include<avr/io.h>
 #include<util/delay.h>
-#include<liberaries/USART_liberry/usart.h>
+#include<liberaries/USART_liberry/usart.c>
 void init_Timers(uint8_t i)
 {
    DDRB |= (1 << DDB1);
@@ -43,11 +43,11 @@ int main(void)
 {
   uint8_t i = 0 ;
   uint8_t direction = 0;
-//  initUSART();
+  initUSART();
    while (1)
    {
     // PORTB ^= (1<<PB5);
-   // printString("enter the duty cycle :")
+    printString("enter the duty cycle :");
     _delay_us(5000);
     i += direction;
     if (i==255)direction = -1;
