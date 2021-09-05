@@ -46,7 +46,7 @@ int main(void)
   initUSART();
    while (1)
    {
-    // PORTB ^= (1<<PB5);
+     PORTB ^= (1<<PB5);
     printString("enter the duty cycle :");
     _delay_us(5000);
     i += direction;
