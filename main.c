@@ -44,7 +44,7 @@ int main(void)
 {
   uint8_t i = 0 ;
   uint8_t direction = 0;
-  initUSART();
+  serialbegin();
   init_Timers();
   OCR1A = 0;
   OCR1B = 0;
@@ -52,12 +52,9 @@ int main(void)
    while (1)
    {
      PORTB ^= (1<<PB5);
-   printString("enter the duty cycle :");
+   printString("enter the duty cycle : \n");
    i = receiveByte();
-    _delay_us(5000);
-    i += direction;
-    if (i==255)direction = -1;
-    if (i==0)direction = 1;
+   printInt(i);
    OCR1B = OCR1A;
    OCR1A = i;
    }

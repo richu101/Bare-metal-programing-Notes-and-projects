@@ -19,7 +19,9 @@
 #include <avr/io.h>
 #include "usart.h"
 #include <util/setbaud.h>
-#define F_CPU 16000000 
+#ifndef F_CPU 
+    #define F_CPU 16000000
+#endif
 #define BAUD 9600
 #define UBBR_VAL ((F_CPU/16/BAUD)-1)
 
