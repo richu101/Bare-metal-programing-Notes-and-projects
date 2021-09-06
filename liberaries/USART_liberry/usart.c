@@ -20,20 +20,17 @@
 #include "usart.h"
 #include <util/setbaud.h>
 #define F_CPU 16000000 
-void initUSART(void) {                         /* requires BAUD */
-  UBRR0H = UBRRH_VALUE;                       /* defined in setbaud.h */
-  UBRR0L = UBRRL_VALUE;
-#if USE_2X
-  UCSR0A |= (1 << U2X0);
-#else
-  UCSR0A &= ~(1 << U2X0);
-#endif
-                                  /* Enable USART transmitter/receiver */
-  UCSR0B = (1 << TXEN0) | (1 << RXEN0);
-  UCSR0C = (1 << UCSZ01) | (1 << UCSZ00);   /* 8 data bits, 1 stop bit */
+#define BAUD 9600
+#define UBBR_VAL ((F_CPU/16/BAUD)-1)
+
+
+void serialbegin()
+{
+	UCSR0B = (1<<TXEN0) | (1<<RXEN0) ;
+	UCSR0C = (1<<UCSZ00) | (1<<UCSZ01);
+	UBRR0L = UBBR_VAL;
+	UBRR0H = UBBR_VAL >> 8;
 }
-
-
 void transmitByte(uint8_t data) {
                                      /* Wait for empty transmit buffer */
   loop_until_bit_is_set(UCSR0A, UDRE0);
