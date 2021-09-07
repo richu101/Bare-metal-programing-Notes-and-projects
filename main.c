@@ -2,13 +2,13 @@
 -------------------------------------------------------------------------------
 |   
 |   This progtam is to create a pwm signal using the timer 1 
-|   16 bit timer 
-|   in this the pwm is generated using the fast pwm mode
+|   and it's duty cycle is cntrolled by the input we given via USART 
 |   
+|   In this the pwm is generated using the fast pwm mode
 |   
 |   The freequency of the pwm can be calculatedd using this equatation
 |                
-|    fOCnxPCPWM =  f_clk_IO / 2 * prescaler divider * TOP 
+|    fOCnxPCPWM =  f_clk_IO /  prescaler divider * TOP 
 |   
 |   
 --------------------------------------------------------------------------------
@@ -54,8 +54,10 @@ int main(void)
      PORTB ^= (1<<PB5);
    printString("enter the duty cycle : \n");
    i = receiveByte();
-   printInt(i);
    OCR1B = OCR1A;
+   _delay_ms(20);
+   printInt(i);
+   
    OCR1A = i;
    }
 }
