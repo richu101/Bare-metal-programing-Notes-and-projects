@@ -8,15 +8,13 @@
 |   
 |   The freequency of the pwm can be calculatedd using this equatation
 |                
-|    fOCnxPCPWM =  f_clk_IO /  prescaler divider * TOP 
-|   
-|   
+|    fOCnxPCPWM =  f_clk_IO /  N * 256
 --------------------------------------------------------------------------------
 */
 
 
 #ifndef __AVR_ATmega328P__     
-    #define __AVR_ATmega328P__
+    #define __AVR_ATmega328P__ 
 #endif
 #define F_CPU 16000000UL
 
@@ -25,6 +23,13 @@
 #include<liberaries/USART_liberry/usart.c>
 void init_Timers(void)
 {
+  /*
+      This function initilze the the pin's OC1A & OC1B in 8 bit fast PWM mode
+      Timer 1 is a  16bit timer we only need it to work in 8 bit we can set this 
+      by setting the WGM10 - WGM13 register
+      Set the prescaler =  8  
+
+  */
    DDRB |= (1 << DDB1);
    DDRB |= (1 << DDB2);
    // PB1 and PB2 as output
