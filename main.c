@@ -56,14 +56,13 @@ int main(void)
 
    while (1)
    {
-     PORTB ^= (1<<PB5);
-   printString("enter the duty cycle : \n");
-   i = receiveByte();
-   OCR1B = OCR1A;
-   _delay_ms(20);
-   printInt(i);
-   
-   OCR1A = i;
+      PORTB ^= (1<<PB5);
+      printString("enter the duty cycle : \n");
+      i = receiveByte();
+      OCR1B = OCR1A;
+      _delay_ms(20);
+      printInt(i);
+      OCR1A = i;
    }
 }
 
