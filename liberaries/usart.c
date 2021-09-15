@@ -24,7 +24,7 @@
 #endif
 #define BAUD 9600
 #define UBBR_VAL ((F_CPU/16/BAUD)-1)
-
+volatile char* serialStr[];
 
 void serialbegin()
 {
@@ -77,25 +77,31 @@ void printString(const char myString[]) {
   }
 }
 
-void readString(char myString[], uint8_t maxLength) {
+const char* readString(uint8_t maxLength) {
   char response;
+  char serialStr[maxLength];
   uint8_t i;
   i = 0;
-  while (i < (maxLength - 1)) {                   /* prevent over-runs */
+  while (i <= (maxLength - 1)) {                   /* prevent over-runs */
     response = receiveByte();
     transmitByte(response);                                    /* echo */
-    if (response == '\r') {                     /* enter marks the end */
+    if (response == '\n') {                     /* enter marks the end */
       break;
     }
     else {
-      myString[i] = response;                       /* add in a letter */
+     serialStr[i] = response;                       /* add in a letter */
       i++;
     }
   }
-  myString[i] = 0;                          /* terminal NULL character */
+  serialStr[i] = 0;                          /* terminal NULL character */
+  return *serialStr;
 }
 
+/*
+int readInt()
+{
 
-
+}
+*/
 
 
