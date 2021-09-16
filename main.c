@@ -40,10 +40,10 @@ int main(void)
   printString("plz enter a string");
   int i = 0 ;
   int direction = 1;
-  
   printString(readString(10));
    while (1)
    {
+    
     PORTB ^=(1<<PB5);
     _delay_us(900);
     i = i + direction;
