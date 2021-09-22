@@ -40,8 +40,8 @@ SRC = $(MAIN_APP).c
 
 
 # The headers files needed for building the application
-INCLUDE = -I. 
-# INCLUDE  +=  /home/pi/Documents/Bare-metal-programing-Notes-and-projects/
+INCLUDE = -I 
+INCLUDE  +=  /home/pi/Documents/Bare-metal-programing-Notes-and-projects/liberaries
 
 # commands Section
 

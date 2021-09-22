@@ -20,7 +20,7 @@
 
 #include<avr/io.h>
 #include<util/delay.h>
-#include<liberaries/USART_liberry/usart.c>
+#include<USART_liberry/usart.c>
 void init_Timers(void)
 {
   /*
@@ -53,11 +53,11 @@ int main(void)
   init_Timers();
   OCR1A = 0;
   OCR1B = 0;
-
+  printString("enter the duty cycle : \n");
    while (1)
    {
       PORTB ^= (1<<PB5);
-      printString("enter the duty cycle : \n");
+      
       i = receiveByte();
       OCR1B = OCR1A;
       _delay_ms(20);
