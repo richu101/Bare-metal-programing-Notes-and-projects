@@ -2,7 +2,7 @@
 #Main application file name
 MAIN_APP = main
 #Main hex file path in windows format
-MAIN_HEX_PATH = /home/pi/Documents/Bare-metal-programing-Notes-and-projects/$(MAIN_APP).hex
+MAIN_HEX_PATH = E:/Bare-metal-programing-Notes-and-projects/$(MAIN_APP).hex
 
 PROGRAMMER_TYPE = usbasp #or usbtiny
 # extra arguments to avrdude: baud rate, chip type, -F flag, etc.
@@ -30,7 +30,7 @@ DUDEFLAGS += usbasp
 DUDEFLAGS += -p
 DUDEFLAGS += m328p  
 DUDEFLAGS += -P 
-DUDEFLAGS += /dev/ttyAMA0 # add port of the isp programmer here
+DUDEFLAGS += USBasp # add port of the isp programmer here
 DUDEFLAGS += -b 
 DUDEFLAGS += 19200 
 DUDEFLAGS += -U flash:w:$(MAIN_HEX_PATH):i
@@ -41,9 +41,14 @@ SRC = $(MAIN_APP).c
 
 # The headers files needed for building the application
 INCLUDE = -I 
+<<<<<<< HEAD
 INCLUDE  +=  /home/pi/Documents/Bare-metal-programing-Notes-and-projects/liberaries
+=======
+INCLUDE  +=  E:/Bare-metal-programing-Notes-and-projects/liberaries
+>>>>>>> 3775e376ed6c2f8939f66c34b6b2fef4abcf9912
 
 # commands Section
+
 
 Burn : Build
 	$(AVRDUDE) $(DUDEFLAGS) 

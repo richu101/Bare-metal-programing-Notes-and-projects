@@ -12,6 +12,9 @@
 #define   USART_HAS_DATA   bit_is_set(UCSR0A, RXC0)
 #define   USART_READY      bit_is_set(UCSR0A, UDRE0)
 
+
+
+
 /* Takes the defined BAUD and F_CPU,
    calculates the bit-clock multiplier,
    and configures the hardware USART                   */
@@ -27,10 +30,9 @@ uint8_t receiveByte(void);
 
 void printString(const char myString[]);
              /* Utility function to transmit an entire string from RAM */
-void readString(char myString[], uint8_t maxLength);
+const char* readString(uint8_t maxLength);
 /* Define a string variable, pass it to this function
    The string will contain whatever you typed over serial */
-
 
 void printInt(uint16_t num);
 
