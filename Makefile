@@ -13,7 +13,7 @@ CC = avr-gcc
 # avr-objcopy -oihex -R .eeprom blink.elf blink.hex
 OBJCOPY = avr-objcopy
 AVRDUDE := avrdude
-MCU = atmega328p
+MCU = atmega8a
 #Options for avr-gcc
 CFLAGS = -g -Os -o
 
@@ -41,7 +41,7 @@ SRC = $(MAIN_APP).c
 
 # The headers files needed for building the application
 INCLUDE = -I 
-INCLUDE  +=  E:/Bare-metal-programing-Notes-and-projects/liberaries
+INCLUDE  +=  /home/pi/Documents/Bare-metal-programing-Notes-and-projects/liberaries
 
 # commands Section
 
