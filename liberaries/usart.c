@@ -24,7 +24,7 @@
 #endif
 #define BAUD 9600
 #define UBBR_VAL ((F_CPU/16/BAUD)-1)
-volatile char* serialStr[];
+const char* serialStr[];
 
 void serialbegin()
 {
