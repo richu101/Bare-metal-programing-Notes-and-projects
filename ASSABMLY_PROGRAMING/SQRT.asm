@@ -12,9 +12,7 @@ MOV R2, #00H
 
 HERE: 	SUBB A, R1
 	MOV R0,A
-
 	INC R1
-
 	INC R1
 
 	INC R2
