@@ -2,18 +2,18 @@
 #Main application file name
 MAIN_APP = main
 #Main hex file path in windows format
-MAIN_HEX_PATH = E:/Bare-metal-programing-Notes-and-projects/$(MAIN_APP).hex
+MAIN_HEX_PATH = E:\Electronics\Bare-metal-programing-Notes-and-projects\$(MAIN_APP).hex
 
 PROGRAMMER_TYPE = usbasp #or usbtiny
 # extra arguments to avrdude: baud rate, chip type, -F flag, etc.
 PROGRAMMER_ARGS = 	
 # Compiler and other Section
-CC = avr-gcc
+CC = E:/Electronics/ARDUINO_IDE/arduino-1.8.16/hardware/tools/avr/bin/avr-gcc.exe
 #   JCOPY = avr-objcopy
 # avr-objcopy -oihex -R .eeprom blink.elf blink.hex
-OBJCOPY = avr-objcopy
-AVRDUDE := avrdude
-MCU = atmega8a
+OBJCOPY = E:\Electronics\ARDUINO_IDE\arduino-1.8.16\hardware\tools\avr\bin\avr-objcopy.exe
+AVRDUDE := E:\Electronics\ARDUINO_IDE\arduino-1.8.16\hardware\tools\avr\bin\avrdude.exe
+MCU = atmega328p
 #Options for avr-gcc
 CFLAGS = -g -Os -o
 
@@ -41,7 +41,7 @@ SRC = $(MAIN_APP).c
 
 # The headers files needed for building the application
 INCLUDE = -I 
-INCLUDE  +=  /home/pi/Documents/Bare-metal-programing-Notes-and-projects/liberaries
+INCLUDE  += 
 
 # commands Section
 
