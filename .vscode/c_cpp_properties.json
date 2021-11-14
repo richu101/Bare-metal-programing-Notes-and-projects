@@ -4,11 +4,11 @@
             "name": "Windows",
             "includePath": [
                 "${workspaceFolder}/**",
-                "E:/ARDUINO IDE/arduino-1.8.16/hardware/tools/avr/avr/include",
-                "E:/Bare-metal-programing-Notes-and-projects/liberaries/"
+                "E:/Electronics/ARDUINO_IDE/arduino-1.8.16/hardware/tools/avr/avr/include",
+                "E:/Electronics/Bare-metal-programing-Notes-and-projects/liberaries/"
             ],
             "defines": [],
-            "compilerPath": "E:/ARDUINO IDE/arduino-1.8.16/hardware/tools/avr/bin/avr-gcc.exe", // here u need to add the path to avr-gcc
+            "compilerPath": "E:/Electronics/ARDUINO_IDE/arduino-1.8.16/hardware/tools/avr/bin/avr-gcc.exe",
             "cStandard": "c11",
             "cppStandard": "c++17",
             "intelliSenseMode": "gcc-x86"
