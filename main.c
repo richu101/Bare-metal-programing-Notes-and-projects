@@ -1,5 +1,5 @@
 /* 
--------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------
 |   
 |   Just a basic blink code
 |   
@@ -9,7 +9,7 @@
 |   
 |   Reffrence https://codenlogic.blogspot.com/2015/07/interfacing-of-pcf-8574-to-atmega16.html
 |
---------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------
 */
 
 #ifndef __AVR_ATmega328P__ 
@@ -21,36 +21,64 @@
 #include<util/delay.h>
 
 uint8_t ack=0;
-  void i2c_init()
+void I2C_Init()
 {
-	TWBR = 0x48;		//--- Baud rate is set by calculating the of TWBR see Details for Reference
-	TWCR = (1<<TWEN);	//--- Enable I2C
-	// TWSR = 0x00;		//--- Prescaler set to 1
-}
-void i2c_start_transmit(){
-        TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWSTA);
-        while(!(TWCR & (1<<TWINT))); 
+  TWBR=0x48;
 }
 
-void i2c_stop_transmit(){
+void i2c_init()
+{
+
+	TWBR = 0x48;	  	       // --- Baud rate is set by calculating the of TWBR see Details for Reference
+	TWCR = (1<<TWEN);       // --- Enable I2C
+	// TWSR = 0x00;	       // --- Prescaler set to 1
+}
+
+void i2c_start_transmit()
+{
+
+      TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWSTA);
+      while((TWCR & (1<<TWINT))); 
+      while((TWSR != 0x08)); // check the status register weater the start condition is send or not
+}
+void I2C_Start()
+{
+      TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWSTA);
+      while((TWCR&(1<<TWINT))==0);
+      while((TWSR&0xF8)!=0x08);
+}
+
+void i2c_stop_transmit()
+{
+
         TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWSTO);
         while(!(TWCR & (1<<TWINT))); 
 }
 
-void i2ctransmit_data(unsigned int a){
+void i2ctransmit_data(unsigned char a ){
         TWCR=(1<<TWINT)|(1<<TWEN);
         TWDR = a;
 
-        while(!(TWCR & (1<<TWINT)));
+        while((TWCR & (1<<TWINT)) == 0);
 }
-/*
-void i2caddr (uint8_t a, uint8_t b  )
+
+void I2C_Write_Data(unsigned char Data){
+  if(ack){
+    TWDR=Data;
+    TWCR=(1<<TWINT)|(1<<TWEN);
+    while((TWCR&(1<<TWINT))==0);
+  }
+}
+
+
+void i2c_addr (uint8_t a, uint8_t b  )
 {
-        // The value of b = 1 for (READ) b = 0 (WRITE)
-        if (b == 0) a =(a<<1);
-        if (b == 1) a =(a<<1)|(1<<0);
+//      The value of b = 1 for (READ) b = 0 (WRITE)
+        if (b == 0) a = (a<<1);
+        if (b == 1) a = (a<<1) | (1<<0);
         i2ctransmit_data(a);              
-}*/
+}
+
 void I2C_Write_Addr(unsigned char Addr){
   TWDR=(Addr<<1);
   TWCR=(1<<TWINT)|(1<<TWEN);
@@ -59,21 +87,28 @@ void I2C_Write_Addr(unsigned char Addr){
     ack=1;
   }
 }
-
+void I2C_Stop(){
+  TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWSTO);
+  while(TWCR&(1<<4));
+  ack=0;
+}
 int main()
 {
-        DDRB = (1<<PB5); // Set the DDRB port in OUTPUT mode
+       
+        I2C_Init();
         while(1)
         {       
-                        i2c_start_transmit();
-                        I2C_Write_Addr(0X3C);
-                        i2ctransmit_data(0x40);
-                        i2c_stop_transmit();
-                        _delay_ms(100);
+                    i2c_start_transmit();
+                    I2C_Write_Addr(0X08);
+                    I2C_Write_Data(40);
+              //  i2ctransmit_data(60);
+                    I2C_Stop();
+                    _delay_ms(5000);
                 
         }
 return (0);
 }
+
 /*
 #ifndef __AVR_ATmega328P__ 
     #define __AVR_ATmega328P__
@@ -89,6 +124,7 @@ void i2c_init()
 	TWCR = (1<<TWEN);	//--- Enable I2C
 	TWSR = 0x00;		//--- Prescaler set to 1
 }
+
 
 //--- I2C Start Condition ---//
 
@@ -194,4 +230,6 @@ while(1){
   
   
 }
+
+
 */

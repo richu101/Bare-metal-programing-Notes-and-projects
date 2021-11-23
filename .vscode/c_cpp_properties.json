@@ -4,7 +4,7 @@
             "name": "Windows",
             "includePath": [
                 "${workspaceFolder}/**",
-                "E:/Electronics/ARDUINO_IDE/arduino-1.8.16/hardware/tools/avr/avr/include",
+                "E:\\Electronics\\ARDUINO_IDE\\arduino-1.8.16\\hardware\\tools\\avr\\avr\\include",
                 "E:/Electronics/Bare-metal-programing-Notes-and-projects/liberaries/"
             ],
             "defines": [],

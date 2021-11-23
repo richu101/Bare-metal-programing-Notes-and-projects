@@ -8,12 +8,13 @@ PROGRAMMER_TYPE = usbasp #or usbtiny
 # extra arguments to avrdude: baud rate, chip type, -F flag, etc.
 PROGRAMMER_ARGS = 	
 # Compiler and other Section
-CC = E:/Electronics/ARDUINO_IDE/arduino-1.8.16/hardware/tools/avr/bin/avr-gcc.exe
+CC = E:\Electronics\ARDUINO_IDE\arduino-1.8.16\hardware\tools\avr\bin\avr-gcc.exe
 #   JCOPY = avr-objcopy
 # avr-objcopy -oihex -R .eeprom blink.elf blink.hex
 OBJCOPY = E:\Electronics\ARDUINO_IDE\arduino-1.8.16\hardware\tools\avr\bin\avr-objcopy.exe
-AVRDUDE := E:\Electronics\ARDUINO_IDE\arduino-1.8.16\hardware\tools\avr\bin\avrdude.exe
+AVRDUDE = E:\Electronics\avrdude\bin\avrdude.exe
 MCU = atmega328p
+CONFIG = E:\Electronics\avrdude\etc\avrdude.conf
 #Options for avr-gcc
 CFLAGS = -g -Os -o
 
@@ -25,7 +26,9 @@ LFLAGS = -Os -mmcu=atmega328p -o
 HFLAGS =  -O ihex -R .eeprom
 #Options for avrdude to burn the hex file
 #MMCU model here according to avrdude options
-DUDEFLAGS = -c
+DUDEFLAGS = -C
+DUDEFLAGS += E:\Electronics\avrdude\etc\avrdude.conf
+DUDEFLAGS += -c
 DUDEFLAGS += usbasp 
 DUDEFLAGS += -p
 DUDEFLAGS += m328p  
@@ -65,7 +68,7 @@ EFUSE = 0x00
 FUSE_STRING = -U lfuse:w:$(LFUSE):m -U hfuse:w:$(HFUSE):m -U efuse:w:$(EFUSE):m 
 
 fuses: 
-	$(AVRDUDE) -c $(PROGRAMMER_TYPE) -p $(MCU) \
+	$(AVRDUDE) -c $(PROGRAMMER_TYPE) -p $(MCU) 
 	           $(PROGRAMMER_ARGS) $(FUSE_STRING) 
 show_fuses:
 	$(AVRDUDE)  -c $(PROGRAMMER_TYPE) -p $(MCU) $(PROGRAMMER_ARGS) -nv	

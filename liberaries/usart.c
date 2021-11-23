@@ -58,7 +58,6 @@ while (num > 0)
   str[i] = num%10;
   num = num/10;
   i++;
-
 }
 
 
