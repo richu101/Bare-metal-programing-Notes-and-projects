@@ -40,8 +40,8 @@ void i2c_start_transmit()
 
       TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWSTA);
       while((TWCR & (1<<TWINT))); 
-      while((TWSR&0xf8) != 0x08); // check the status register weater the start condition is send or not
-      if((TWSR&0xf8) != 0x18)ack = 1;
+      while((TWSR&0xF8) != 0x08); // check the status register weater the start condition is send or not
+      
 }
 void I2C_Start()
 {
@@ -82,7 +82,9 @@ void i2c_write_addr (uint8_t a, uint8_t b  )
         if (b == 0) a = (a<<1);
         if (b == 1) a = (a<<1) | (1<<0);
         TWCR=(1<<TWINT)|(1<<TWEN);
-        while((TWCR & (1<<TWINT)) == 0);              
+        TWDR = a;
+        while((TWCR & (1<<TWINT)) == 0);     
+        if((TWSR&0xF8) != 0x18)ack = 1;         
 }
 
 void I2C_Write_Addr(unsigned char Addr){
@@ -104,10 +106,10 @@ int main()
         I2C_Init();
         while(1)
         {       
-                    i2c_start_transmit();
-                    I2C_Write_Addr(0X08);
-                    I2C_Write_Data(40);
-              //  i2ctransmit_data(60);
+                    I2C_Start();
+                    I2C_Write_Addr(0x08);
+                    I2C_Write_Data(30);
+                  //  i2ctransmit_data(60);
                     I2C_Stop();
                     _delay_ms(5000);
                 
