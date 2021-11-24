@@ -20,6 +20,7 @@
 #include<avr/io.h>
 #include<util/delay.h>
 
+
 uint8_t ack=0;
 void I2C_Init()
 {
@@ -30,7 +31,7 @@ void i2c_init()
 {
 
 	TWBR = 0x48;	  	       // --- Baud rate is set by calculating the of TWBR see Details for Reference
-	TWCR = (1<<TWEN);       // --- Enable I2C
+	// TWCR = (1<<TWEN);       // --- Enable I2C
 	// TWSR = 0x00;	       // --- Prescaler set to 1
 }
 
@@ -39,7 +40,8 @@ void i2c_start_transmit()
 
       TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWSTA);
       while((TWCR & (1<<TWINT))); 
-      while((TWSR != 0x08)); // check the status register weater the start condition is send or not
+      while((TWSR&0xf8) != 0x08); // check the status register weater the start condition is send or not
+      if((TWSR&0xf8) != 0x18)ack = 1;
 }
 void I2C_Start()
 {
@@ -48,18 +50,15 @@ void I2C_Start()
       while((TWSR&0xF8)!=0x08);
 }
 
-void i2c_stop_transmit()
-{
 
-        TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWSTO);
-        while(!(TWCR & (1<<TWINT))); 
-}
 
-void i2ctransmit_data(unsigned char a ){
-        TWCR=(1<<TWINT)|(1<<TWEN);
+void i2c_write_data(unsigned char a ){
+        if(ack){
         TWDR = a;
-
+        TWCR=(1<<TWINT)|(1<<TWEN);
         while((TWCR & (1<<TWINT)) == 0);
+        }
+
 }
 
 void I2C_Write_Data(unsigned char Data){
@@ -71,12 +70,19 @@ void I2C_Write_Data(unsigned char Data){
 }
 
 
-void i2c_addr (uint8_t a, uint8_t b  )
+void i2c_write_addr (uint8_t a, uint8_t b  )  
 {
-//      The value of b = 1 for (READ) b = 0 (WRITE)
+/*
+| 1st ardument is the 7bit slave addr
+| 
+| 2nd argument  is the read or write bit b = 1 for (READ) b = 0 (WRITE)
+|
+|
+*/
         if (b == 0) a = (a<<1);
         if (b == 1) a = (a<<1) | (1<<0);
-        i2ctransmit_data(a);              
+        TWCR=(1<<TWINT)|(1<<TWEN);
+        while((TWCR & (1<<TWINT)) == 0);              
 }
 
 void I2C_Write_Addr(unsigned char Addr){
