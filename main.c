@@ -31,9 +31,12 @@ void i2c_init()
 i2c_write_addr(uint8_t a,uint8_t b)
 {
 
-TWCR |= (1<<TWSTA)| (1<<TWEN) | (1<<TWINT);
-while (TWCR & (1<<TWINT) == 1);
+TWCR |= (1<<TWSTA)| (1<<TWEN) | (1<<TWINT); // send the start condition
+while (TWCR & (1<<TWINT) == 1); // wait until the twint bit to clear
+while((TWSR&0xF8) != 0x08);
 TWCR &= ~(1<<TWSTA);
+TWCR |= (1<<TWEN) | (1<<TWINT);
+
 
 
 }
