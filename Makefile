@@ -50,7 +50,7 @@ INCLUDE  +=
 
 
 Burn : Build
-	$(AVRDUDE) $(DUDEFLAGS) 
+	$(AVRDUDE) $(DUDEFLAGS) -v
 Build : $(MAIN_APP).elf
 	$(OBJCOPY) $(HFLAGS) $< $(MAIN_APP).hex
 	
@@ -71,7 +71,7 @@ fuses:
 	$(AVRDUDE) -c $(PROGRAMMER_TYPE) -p $(MCU) 
 	           $(PROGRAMMER_ARGS) $(FUSE_STRING) 
 show_fuses:
-	$(AVRDUDE)  -c $(PROGRAMMER_TYPE) -p $(MCU) $(PROGRAMMER_ARGS) -nv	
+	$(AVRDUDE)  -c $(PROGRAMMER_TYPE) -p $(MCU) $(PROGRAMMER_ARGS) 	
 
 ## Called with no extra definitions, sets to defaults
 set_default_fuses:  FUSE_STRING = -U lfuse:w:$(LFUSE):m -U hfuse:w:$(HFUSE):m -U efuse:w:$(EFUSE):m 
