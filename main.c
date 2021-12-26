@@ -75,8 +75,29 @@ void i2c_transmit_data(unsigned char a )
   {
     DDRB  &= ~(1<<PB5); // Set the DDRB port in OUTPUT mode 
   }
+ // I2C Stop condition 
+  TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWSTO);
+  while(TWCR&(1<<TWSTO)); // wait until the twint bit to clear
+  ack=0;
 
 }
+void i2c_transmit_str(char str[] )
+{
+
+  uint8_t siz;
+  siz = (sizeof(str[1])/sizeof(str[]))
+  for(uint8_t Count = 0; Count <= siz; Count++ )
+  {
+
+    TWDR = a;
+    TWCR=(1<<TWINT)|(1<<TWEN);
+    while (TWCR & (1<<TWINT) == 0); // wait until the twint bit to clear
+
+  }
+  ack = 0;
+}
+
+
 
 void i2c_stop()
 {
