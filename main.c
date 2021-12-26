@@ -20,6 +20,12 @@
 
 #include<avr/io.h>
 #include<util/delay.h>
+uint8_t ack = 0;
+
+
+
+
+
 
 void i2c_init()
 {
@@ -28,30 +34,150 @@ void i2c_init()
 
 }
 
-i2c_write_addr(uint8_t a,uint8_t b)
-{
 
-TWCR |= (1<<TWSTA)| (1<<TWEN) | (1<<TWINT); // send the start condition
-while (TWCR & (1<<TWINT) == 1); // wait until the twint bit to clear
-while((TWSR&0xF8) != 0x08);
-TWCR &= ~(1<<TWSTA);
-TWCR |= (1<<TWEN) | (1<<TWINT);
 
+
+void i2c_write_addr(uint8_t addr){
+
+
+  TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWSTA);
+  while((TWCR & (1<<TWINT)) == 0);  //TWINT bit set (changing the bit to 0) by hardware when the TWI has finished
+  while((TWSR&0xF8) != 0x08); // check the status register weater the start condition is send or not
+
+  TWDR=(addr<<1);
+  TWCR=(1<<TWINT)|(1<<TWEN);
+  while((TWCR&(1<<TWINT))==0);
+  if((TWSR&0xF8)==0x18)ack=1;
+  if ((TWSR & 0xF8) == 0x20) ack = 0;
+  if ((TWSR & 0xF8) == 0x38) ack = 3;
 
 
 }
 
+void i2c_transmit_data(unsigned char a )
+{
 
+  if(ack == 1)
+  {
+    
+    TWDR = a;
+    // while (TWCR & (1<<TWINT) == 1); 
+    TWCR=(1<<TWINT)|(1<<TWEN);
+    while((TWCR&(1<<TWINT)) != 0); // wait until the twint bit to clear
+
+  }
+  else if(ack == 3)
+  {
+    DDRB  = (1<<PB5); // Set the DDRB port in OUTPUT mode
+    PORTB = (1<<PB5); // Toggle the PB5 port in every sec
+  }
+  if (ack == 0)
+  {
+    DDRB  &= ~(1<<PB5); // Set the DDRB port in OUTPUT mode 
+  }
+
+}
+
+void i2c_stop()
+{
+  TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWSTO);
+  while(TWCR&(1<<TWSTO)); // wait until the twint bit to clear
+  ack=0;
+
+}
+
+/*
 int main()
 {
        
           i2c_init();
+          uint8_t a = 0;
+          DDRB = (1<<PB5); // Set the DDRB port in OUTPUT mode
+          PORTB = (1<<PB5); // Toggle the PB5 port in every sec
+          _delay_ms(1000);
+        while(1)
+        {      
+          PORTB ^= (1<<PB5); // Toggle the PB5 port in every sec 
+          i2c_write_addr(0x08);
+          i2c_transmit_data(a++);
+          i2c_stop();
+          _delay_ms(500);
+          // ^= (1<<PB5); // Toggle the PB5 port in every sec
+                
+        }
+return (0);
+}
+*/
+
+
+
+void I2C_Init()
+{
+  TWBR=0x48;
+}
+
+void i2c_start_transmit()
+{
+
+      TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWSTA);
+      while((TWCR & (1<<TWINT)) == 0); 
+      while((TWSR&0xF8) != 0x08); // check the status register weater the start condition is send or not
+
+}
+
+void I2C_Write_Data(unsigned char Data){
+  if(ack){
+    TWDR=Data;
+    TWCR=(1<<TWINT)|(1<<TWEN);
+    while((TWCR&(1<<TWINT))==0);
+  }
+}
+
+void i2c_write_data(unsigned char a ){
+        if(ack){
+        TWDR = a;
+        TWCR=(1<<TWINT)|(1<<TWEN);
+        while((TWCR & (1<<TWINT)) == 0);
+        }
+
+}
+
+void I2C_Write_Addr(unsigned char Addr)
+{
+
+  TWDR=(Addr<<1);
+  TWCR=(1<<TWINT)|(1<<TWEN);
+  while((TWCR&(1<<TWINT))==0);
+  if((TWSR&0xF8)==0x18)
+  {
+    ack=1;
+  }
+}
+
+void I2C_Stop()
+{
+  TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWSTO);
+  while(TWCR&(1<<4));
+  ack=0;
+}
+int main()
+{
+
+  uint8_t a = 0;
+       
+        I2C_Init();
         while(1)
         {       
-           
+          
+                    // i2c_start_transmit();
+                    i2c_write_addr(0x08);
+                    i2c_transmit(a++);
+                    
+                    I2C_Stop();
                     _delay_ms(500);
                 
         }
 return (0);
 }
 
+ 
