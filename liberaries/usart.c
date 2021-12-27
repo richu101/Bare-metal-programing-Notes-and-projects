@@ -96,11 +96,5 @@ const char* readString(uint8_t maxLength) {
   return *serialStr;
 }
 
-/*
-int readInt()
-{
-
-}
-*/
 
 

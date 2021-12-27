@@ -23,7 +23,7 @@
 uint8_t ack = 0;
 
 
-
+void i2c_stop();
 
 
 
@@ -48,8 +48,8 @@ void i2c_write_addr(uint8_t addr){
   TWCR=(1<<TWINT)|(1<<TWEN);
   while((TWCR&(1<<TWINT))==0);
   if((TWSR&0xF8)==0x18)ack=1;
-  if ((TWSR & 0xF8) == 0x20) ack = 0;
-  if ((TWSR & 0xF8) == 0x38) ack = 3;
+ // if ((TWSR & 0xF8) == 0x20) ack = 0;
+ // if ((TWSR & 0xF8) == 0x38) ack = 3;
 
 
 }
@@ -83,18 +83,24 @@ void i2c_transmit_data(unsigned char a )
 }
 void i2c_transmit_str(char str[] )
 {
+if (ack==1)
+{
+  
+
 
   uint8_t siz;
-  siz = (sizeof(str[1])/sizeof(str[]))
+  siz = (sizeof(str)/sizeof(str[0]));
   for(uint8_t Count = 0; Count <= siz; Count++ )
   {
 
-    TWDR = a;
+    TWDR = str[Count];
     TWCR=(1<<TWINT)|(1<<TWEN);
     while (TWCR & (1<<TWINT) == 0); // wait until the twint bit to clear
 
   }
+}
   ack = 0;
+  i2c_stop();
 }
 
 
@@ -107,28 +113,7 @@ void i2c_stop()
 
 }
 
-/*
-int main()
-{
-       
-          i2c_init();
-          uint8_t a = 0;
-          DDRB = (1<<PB5); // Set the DDRB port in OUTPUT mode
-          PORTB = (1<<PB5); // Toggle the PB5 port in every sec
-          _delay_ms(1000);
-        while(1)
-        {      
-          PORTB ^= (1<<PB5); // Toggle the PB5 port in every sec 
-          i2c_write_addr(0x08);
-          i2c_transmit_data(a++);
-          i2c_stop();
-          _delay_ms(500);
-          // ^= (1<<PB5); // Toggle the PB5 port in every sec
-                
-        }
-return (0);
-}
-*/
+
 
 
 
@@ -154,6 +139,38 @@ void I2C_Write_Data(unsigned char Data){
   }
 }
 
+void I2C_Stop()
+{
+  TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWSTO);
+  while(TWCR&(1<<4));
+  ack=0;
+}
+
+int main()
+{
+
+  uint8_t a = 6;
+       
+        I2C_Init();
+        while(1)
+        {       
+          
+                    // i2c_start_transmit();
+                    i2c_write_addr(0x08);
+                     i2c_transmit_str("Hello from I2C");
+                    // I2C_Write_Data(a++);
+                    
+                   //  I2C_Stop();
+                    _delay_ms(500);
+                
+        }
+return (0);
+}
+
+ 
+
+ /*
+
 void i2c_write_data(unsigned char a ){
         if(ack){
         TWDR = a;
@@ -175,30 +192,24 @@ void I2C_Write_Addr(unsigned char Addr)
   }
 }
 
-void I2C_Stop()
-{
-  TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWSTO);
-  while(TWCR&(1<<4));
-  ack=0;
-}
 int main()
 {
-
-  uint8_t a = 0;
        
-        I2C_Init();
+          i2c_init();
+          uint8_t a = 0;
+          DDRB = (1<<PB5); // Set the DDRB port in OUTPUT mode
+          PORTB = (1<<PB5); // Toggle the PB5 port in every sec
+          _delay_ms(1000);
         while(1)
-        {       
-          
-                    // i2c_start_transmit();
-                    i2c_write_addr(0x08);
-                    i2c_transmit(a++);
-                    
-                    I2C_Stop();
-                    _delay_ms(500);
+        {      
+          PORTB ^= (1<<PB5); // Toggle the PB5 port in every sec 
+          i2c_write_addr(0x08);
+          i2c_transmit_data(a++);
+          i2c_stop();
+          _delay_ms(500);
+          // ^= (1<<PB5); // Toggle the PB5 port in every sec
                 
         }
 return (0);
 }
-
- 
+*/
