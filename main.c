@@ -34,7 +34,13 @@ void i2c_init()
 
 }
 
+void i2c_stop()
+{
+  TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWSTO);
+  while(TWCR&(1<<TWSTO)); // wait until the twint bit to clear
+  ack=0;
 
+}
 
 
 void i2c_write_addr(uint8_t addr){
@@ -83,35 +89,25 @@ void i2c_transmit_data(unsigned char a )
 }
 void i2c_transmit_str(char str[] )
 {
-if (ack==1)
-{
-  
 
-
-  uint8_t siz;
-  siz = (sizeof(str)/sizeof(str[0]));
-  for(uint8_t Count = 0; Count <= siz; Count++ )
+  uint8_t siz = 0;
+  // siz = (sizeof(str[1])/sizeof(str[]))
+  // for(uint8_t Count = 0; Count <= siz; Count++ )
+  while(str[siz])
   {
-
-    TWDR = str[Count];
+    siz++;
+    TWDR = str[siz];
     TWCR=(1<<TWINT)|(1<<TWEN);
     while (TWCR & (1<<TWINT) == 0); // wait until the twint bit to clear
 
   }
-}
   ack = 0;
   i2c_stop();
 }
 
 
 
-void i2c_stop()
-{
-  TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWSTO);
-  while(TWCR&(1<<TWSTO)); // wait until the twint bit to clear
-  ack=0;
 
-}
 
 
 
@@ -132,6 +128,7 @@ void i2c_start_transmit()
 }
 
 void I2C_Write_Data(unsigned char Data){
+  if((TWSR&0xF8)==0x18)ack=1;
   if(ack){
     TWDR=Data;
     TWCR=(1<<TWINT)|(1<<TWEN);
@@ -139,12 +136,7 @@ void I2C_Write_Data(unsigned char Data){
   }
 }
 
-void I2C_Stop()
-{
-  TWCR=(1<<TWINT)|(1<<TWEN)|(1<<TWSTO);
-  while(TWCR&(1<<4));
-  ack=0;
-}
+
 
 int main()
 {
@@ -152,13 +144,21 @@ int main()
   uint8_t a = 6;
        
         I2C_Init();
+        i2c_write_addr(0x08);
+
+        I2C_Write_Data(a++);
+        I2C_Write_Data(a++);
+        i2c_stop();
+        i2c_write_addr(0x08);
+        I2C_Write_Data(++a);
+        i2c_stop();
         while(1)
         {       
           
                     // i2c_start_transmit();
                     i2c_write_addr(0x08);
                      i2c_transmit_str("Hello from I2C");
-                    // I2C_Write_Data(a++);
+                    // 
                     
                    //  I2C_Stop();
                     _delay_ms(500);
