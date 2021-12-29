@@ -141,7 +141,7 @@ void I2C_Write_Data(unsigned char Data){
 int main()
 {
 
-  uint8_t a = 6;
+  uint8_t a = 48;
        
         I2C_Init();
         i2c_write_addr(0x08);
