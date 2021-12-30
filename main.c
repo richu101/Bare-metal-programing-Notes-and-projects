@@ -128,12 +128,15 @@ void i2c_start_transmit()
 }
 
 void I2C_Write_Data(unsigned char Data){
+  
   if((TWSR&0xF8)==0x18)ack=1;
+  
   if(ack){
     TWDR=Data;
     TWCR=(1<<TWINT)|(1<<TWEN);
     while((TWCR&(1<<TWINT))==0);
   }
+  
 }
 
 
@@ -141,24 +144,22 @@ void I2C_Write_Data(unsigned char Data){
 int main()
 {
 
-  uint8_t a = 48;
+ 
        
         I2C_Init();
-        i2c_write_addr(0x08);
-
-        I2C_Write_Data(a++);
-        I2C_Write_Data(a++);
-        i2c_stop();
-        i2c_write_addr(0x08);
-        I2C_Write_Data(++a);
-        i2c_stop();
+       uint8_t a = 48;
         while(1)
         {       
           
                     // i2c_start_transmit();
-                    i2c_write_addr(0x08);
-                     i2c_transmit_str("Hello from I2C");
-                    // 
+          //          i2c_write_addr(0x08);
+                   
+        i2c_write_addr(0x08);
+
+        I2C_Write_Data(a++);
+        I2C_Write_Data(a++);
+
+        i2c_stop(); 
                     
                    //  I2C_Stop();
                     _delay_ms(500);
