@@ -42,6 +42,17 @@ void i2c_stop()
 
 }
 
+void I2C_Write_Data(unsigned char Data){
+  
+  if((TWSR&0xF8)==0x18)ack=1;
+  
+  if(ack){
+    TWDR=Data;
+    TWCR=(1<<TWINT)|(1<<TWEN);
+    while((TWCR&(1<<TWINT))==0);
+  }
+  
+}
 
 void i2c_write_addr(uint8_t addr){
 
@@ -62,7 +73,7 @@ void i2c_write_addr(uint8_t addr){
 
 void i2c_transmit_data(unsigned char a )
 {
-
+if((TWSR&0xF8)==0x18)ack=1;
   if(ack == 1)
   {
     
@@ -90,26 +101,18 @@ void i2c_transmit_data(unsigned char a )
 void i2c_transmit_str(char str[] )
 {
 
-  uint8_t siz = 0;
-  // siz = (sizeof(str[1])/sizeof(str[]))
-  // for(uint8_t Count = 0; Count <= siz; Count++ )
-  while(str[siz])
+  uint8_t Count,siz = 0;
+  siz = (sizeof(str)/sizeof(str[0]));
+  
+
+  for(Count=0;Count<=siz;Count++ )
   {
-    siz++;
-    TWDR = str[siz];
-    TWCR=(1<<TWINT)|(1<<TWEN);
-    while (TWCR & (1<<TWINT) == 0); // wait until the twint bit to clear
-
+    I2C_Write_Data(str[Count]);
+    
   }
-  ack = 0;
-  i2c_stop();
+ 
+  
 }
-
-
-
-
-
-
 
 
 
@@ -127,17 +130,7 @@ void i2c_start_transmit()
 
 }
 
-void I2C_Write_Data(unsigned char Data){
-  
-  if((TWSR&0xF8)==0x18)ack=1;
-  
-  if(ack){
-    TWDR=Data;
-    TWCR=(1<<TWINT)|(1<<TWEN);
-    while((TWCR&(1<<TWINT))==0);
-  }
-  
-}
+
 
 
 
@@ -145,26 +138,28 @@ int main()
 {
 
  
-       
-        I2C_Init();
-       uint8_t a = 48;
-        while(1)
-        {       
+  DDRB = (1<<PB5); 
+  PORTB |= (1<<PB5);
+  _delay_ms(100);
+  PORTB &= ~(1<<PB5);
+  DDRB &= ~(1<<PB5); 
+  I2C_Init();
+  uint8_t a = 48;
+
+  while(1)
+  {       
+    
+              // i2c_start_transmit();
+    //          i2c_write_addr(0x08);
+              
+  i2c_write_addr(0x08);
+
+  I2C_Write_Data('h');
+  i2c_transmit_str("el");
+  i2c_stop();
+   _delay_ms(500);
           
-                    // i2c_start_transmit();
-          //          i2c_write_addr(0x08);
-                   
-        i2c_write_addr(0x08);
-
-        I2C_Write_Data(a++);
-        I2C_Write_Data(a++);
-
-        i2c_stop(); 
-                    
-                   //  I2C_Stop();
-                    _delay_ms(500);
-                
-        }
+  }
 return (0);
 }
 
