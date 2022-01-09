@@ -20,6 +20,7 @@
 
 #include<avr/io.h>
 #include<util/delay.h>
+#include"liberaries/USART_liberry/usart.c"
 uint8_t ack = 0;
 
 
@@ -103,17 +104,14 @@ void i2c_transmit_str(char str[] )
 
   uint8_t Count,siz = 0;
   siz = (sizeof(str)/sizeof(str[0]));
-  
+  printInt(siz);
 
   for(Count=0;Count<=siz;Count++ )
   {
     I2C_Write_Data(str[Count]);
-    
-  }
- 
   
 }
-
+}
 
 
 void I2C_Init()
@@ -137,7 +135,7 @@ void i2c_start_transmit()
 int main()
 {
 
- 
+ serialbegin();
   DDRB = (1<<PB5); 
   PORTB |= (1<<PB5);
   _delay_ms(100);
@@ -155,57 +153,11 @@ int main()
   i2c_write_addr(0x08);
 
   I2C_Write_Data('h');
-  i2c_transmit_str("el");
+  i2c_transmit_str("eoooo");
   i2c_stop();
-   _delay_ms(500);
+   _delay_ms(2000);
           
   }
-return (0);
+return(0);
 }
 
- 
-
- /*
-
-void i2c_write_data(unsigned char a ){
-        if(ack){
-        TWDR = a;
-        TWCR=(1<<TWINT)|(1<<TWEN);
-        while((TWCR & (1<<TWINT)) == 0);
-        }
-
-}
-
-void I2C_Write_Addr(unsigned char Addr)
-{
-
-  TWDR=(Addr<<1);
-  TWCR=(1<<TWINT)|(1<<TWEN);
-  while((TWCR&(1<<TWINT))==0);
-  if((TWSR&0xF8)==0x18)
-  {
-    ack=1;
-  }
-}
-
-int main()
-{
-       
-          i2c_init();
-          uint8_t a = 0;
-          DDRB = (1<<PB5); // Set the DDRB port in OUTPUT mode
-          PORTB = (1<<PB5); // Toggle the PB5 port in every sec
-          _delay_ms(1000);
-        while(1)
-        {      
-          PORTB ^= (1<<PB5); // Toggle the PB5 port in every sec 
-          i2c_write_addr(0x08);
-          i2c_transmit_data(a++);
-          i2c_stop();
-          _delay_ms(500);
-          // ^= (1<<PB5); // Toggle the PB5 port in every sec
-                
-        }
-return (0);
-}
-*/
