@@ -21,6 +21,9 @@
 #include<avr/io.h>
 #include<util/delay.h>
 #include"liberaries/USART_liberry/usart.c"
+
+#include<string.h>
+
 uint8_t ack = 0;
 
 
@@ -101,17 +104,29 @@ if((TWSR&0xF8)==0x18)ack=1;
 }
 void i2c_transmit_str(char str[] )
 {
+ uint8_t Count;
 
-  uint8_t Count,siz = 0;
-  siz = (sizeof(str)/sizeof(str[0]));
-  printInt(siz);
+int siz = strlen(str);
+ printInt(siz);
 
+if(siz==2||siz==1)
+{
+  DDRB &= ~(1<<PB5);
+  PORTB &= ~(1<<PB5);
+}
+else
+{
+  DDRB  |= (1<<PB5);
+  PORTB |= (1<PB5);
+  
+}
   for(Count=0;Count<=siz;Count++ )
   {
     I2C_Write_Data(str[Count]);
   
 }
 }
+
 
 
 void I2C_Init()
@@ -142,7 +157,7 @@ int main()
   PORTB &= ~(1<<PB5);
   DDRB &= ~(1<<PB5); 
   I2C_Init();
-  uint8_t a = 48;
+  
 
   while(1)
   {       
@@ -152,8 +167,8 @@ int main()
               
   i2c_write_addr(0x08);
 
-  I2C_Write_Data('h');
-  i2c_transmit_str("eoooo");
+ // I2C_Write_Data('h');
+  i2c_transmit_str("hellooo \n");
   i2c_stop();
    _delay_ms(2000);
           
